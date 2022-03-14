@@ -66,6 +66,7 @@ public class Player : MonoBehaviour {
         // 0f -> player on the current spot
         // 1f -> player reached the intermediary spot
         float factor = MathSET.Map(clock, 0f, moveTime, 0f, 1f);
+        factor = TaleUtil.Math.ParametricBlend(factor); // Ease in-out
 
         // 0f -> base spot position
         // 1f -> intermediary spot position
