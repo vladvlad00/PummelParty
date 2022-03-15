@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 
     public const float SPEED = 7.5f; // Moving speed
 
+    public int id;
     [NonSerialized]
     public new Transform transform;
     [NonSerialized]

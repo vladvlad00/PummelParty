@@ -11,27 +11,39 @@ public class GameMaster : MonoBehaviour
     {
         IDLE,
         PLAYER_MOVING,
-        MINIGAME_RESULTS
+        MINIGAME,
+        SPOT_MINIGAME_FINISHED
     }
 
     public const float MINIGAME_RESULTS_DURATION = 2f;
+    public static bool INPUT_ENABLED = true;
+
+    public static GameMaster INSTANCE = null;
 
     public GameObject board;
     public List<Player> players;
-    public TextMeshProUGUI diceText;
 
-    public GameObject minigameCanvas;
-    public TextMeshProUGUI minigameResultText;
-    
+    [NonSerialized]
+    public GameGuard guard = null; // Holds stuff specific to the Game scene
     [NonSerialized]
     public List<Transform> boardSpots;
 
+    [NonSerialized]
+    public int minigameTriggerSpot; // The spot where the minigame was triggered
+    [NonSerialized]
+    public List<Player> minigameTriggerPlayers; // The players on that spot;
+
     int currentPlayer;
     State state;
-    float clock;
 
     void Awake()
     {
+        if(INSTANCE != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         boardSpots = new List<Transform>();
 
         foreach(Transform child in board.transform)
@@ -47,7 +59,11 @@ public class GameMaster : MonoBehaviour
         currentPlayer = 0;
 
         state = State.IDLE;
-        clock = 0f;
+
+        OnReturnToGame();
+
+        DontDestroyOnLoad(gameObject);
+        INSTANCE = this;
     }
 
     void Update()
@@ -65,22 +81,34 @@ public class GameMaster : MonoBehaviour
                     OnPlayerMovingEnd();
                 }
                 break;
-            case State.MINIGAME_RESULTS:
-                clock += Time.deltaTime;
+            case State.MINIGAME:
+                break;
+            case State.SPOT_MINIGAME_FINISHED:
+                TriggerMinigameOnSpot(); // Check for additional spots with multiple players
 
-                if(clock >= MINIGAME_RESULTS_DURATION)
+                if(state == State.SPOT_MINIGAME_FINISHED)
                 {
-                    minigameResultText.text = "";
-                    minigameCanvas.SetActive(false);
                     state = State.IDLE;
                 }
                 break;
         }
     }
 
+    public void OnSpotMinigameEnd()
+    {
+        state = State.SPOT_MINIGAME_FINISHED;
+        ++minigameTriggerSpot;
+    }
+
+    // Minigame -> Game scene
+    public void OnReturnToGame()
+    {
+        guard = GameGuard.INSTANCE;
+    }
+
     void WaitForPlayerMove()
     {
-        if (Input.GetKeyDown("space"))
+        if (INPUT_ENABLED && Input.GetKeyDown("space"))
         {
             OnPlayerRoll();
         }
@@ -89,7 +117,8 @@ public class GameMaster : MonoBehaviour
     void OnPlayerRoll()
     {
         int dice = UnityEngine.Random.Range(1, 7);
-        diceText.text = dice.ToString();
+
+        guard.diceText.text = string.Format("You rolled <color=#880000>{0}</color>!", dice.ToString());
 
         int targetSpot = (players[currentPlayer].spot + dice) % boardSpots.Count;
 
@@ -100,64 +129,38 @@ public class GameMaster : MonoBehaviour
 
     void OnPlayerMovingEnd()
     {
-        for(int i = 0; i < boardSpots.Count; i++)
-        {
-            List<Player> spotPlayers = new List<Player>();
+        minigameTriggerSpot = 0;
+        TriggerMinigameOnSpot();
+    }
 
-            for(int j = 0; j < players.Count; ++j)
+    void TriggerMinigameOnSpot()
+    {
+        for (; minigameTriggerSpot < boardSpots.Count; minigameTriggerSpot++)
+        {
+            minigameTriggerPlayers = new List<Player>();
+
+            for (int j = 0; j < players.Count; ++j)
             {
-                if(players[j].spot == i)
+                if (players[j].spot == minigameTriggerSpot)
                 {
-                    spotPlayers.Add(players[j]);
+                    minigameTriggerPlayers.Add(players[j]);
                 }
             }
 
-            if(spotPlayers.Count > 1)
+            if (minigameTriggerPlayers.Count > 1)
             {
-                List<int> rolls = new List<int>();
-                int maxIndex = -1;
+                state = State.MINIGAME;
 
-                StringBuilder sb = new StringBuilder();
+                TaleExtra.DisableInput();
+                TaleExtra.RipOut();
+                Tale.Scene("Barbut");
+                TaleExtra.RipIn();
+                TaleExtra.EnableInput();
 
-                foreach(Player p in spotPlayers)
-                {
-                    int roll = UnityEngine.Random.Range(1, 7);
-                    rolls.Add(roll);
-
-                    if(maxIndex == -1 || rolls[maxIndex] < roll)
-                    {
-                        maxIndex = rolls.Count - 1;
-                    }
-
-                    if(sb.Length > 0)
-                    {
-                        sb.Append("\n");
-                    }
-
-                    sb.AppendFormat("Player <color=#880000>{0}</color> rolled <color=#880000>{1}</color>", rolls.Count, roll);
-                }
-
-                sb.Append("\n");
-
-                for(int j = 0; j < players.Count; ++j)
-                {
-                    if(rolls[j] == rolls[maxIndex])
-                    {
-                        if(sb.Length > 0)
-                        {
-                            sb.Append("\n");
-                        }
-                        sb.AppendFormat("Player {0} won!", j + 1);
-                    }
-                }
-
-                minigameCanvas.SetActive(true);
-                minigameResultText.text = sb.ToString();
-
-                state = State.MINIGAME_RESULTS;
-                clock = 0f;
-                break;
+                return;
             }
         }
+
+        guard.diceText.text = "Press <color=#880000>space</color> to roll!";
     }
 }
