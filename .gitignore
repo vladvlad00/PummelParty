@@ -6,6 +6,8 @@ Build/
 UserSettings/
 .vs/
 
+.claudiaideconfig
+
 ExportedObj/
 obj/
 *.svd
