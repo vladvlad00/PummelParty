@@ -88,8 +88,7 @@ public class GameMaster : MonoBehaviour
 
     void OnPlayerRoll()
     {
-        //int dice = UnityEngine.Random.Range(1, 7);
-        int dice = 2;
+        int dice = UnityEngine.Random.Range(1, 7);
         diceText.text = dice.ToString();
 
         int targetSpot = (players[currentPlayer].spot + dice) % boardSpots.Count;
