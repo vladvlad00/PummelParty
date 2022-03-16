@@ -1,9 +1,9 @@
+//#define MINIGAME_SPOT_DEBUG
+// TODO: Replace this directive with something else (like a Backport command?)
+// TODO: Integrate Backport
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using System.Text;
 
 public class GameMaster : MonoBehaviour
 {
@@ -15,7 +15,6 @@ public class GameMaster : MonoBehaviour
         SPOT_MINIGAME_FINISHED
     }
 
-    public const float MINIGAME_RESULTS_DURATION = 2f;
     public static bool INPUT_ENABLED = true;
 
     public static GameMaster INSTANCE = null;
@@ -116,7 +115,11 @@ public class GameMaster : MonoBehaviour
 
     void OnPlayerRoll()
     {
+#if MINIGAME_SPOT_DEBUG
+        int dice = 2;
+#else
         int dice = UnityEngine.Random.Range(1, 7);
+#endif
 
         guard.diceText.text = string.Format("You rolled <color=#880000>{0}</color>!", dice.ToString());
 
