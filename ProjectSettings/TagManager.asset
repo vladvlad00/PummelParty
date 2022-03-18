@@ -41,3 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BoardUI
+    uniqueID: 2771787565
+    locked: 0

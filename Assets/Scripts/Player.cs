@@ -6,7 +6,8 @@ using System;
 public class Player : MonoBehaviour {
     public enum State {
         IDLE,
-        MOVING
+        MOVING,
+        SELECTING_SPOT
     }
 
     public const float SPEED = 7.5f; // Moving speed
@@ -19,10 +20,16 @@ public class Player : MonoBehaviour {
     [NonSerialized]
     public State state;
 
+    [SerializeField]
+    GameObject selectSpotPrefab;
+
     int moveCount;
     Spot intermediarySpot;
     float clock;
     float moveTime;
+
+    // The arrows that the player uses to select a spot
+    List<GameObject> spotSelectionArrows;
 
     void Awake()
     {
@@ -38,6 +45,16 @@ public class Player : MonoBehaviour {
                 return;
             case State.MOVING:
                 Move();
+                break;
+            case State.SELECTING_SPOT:
+                // The player has selected a spot and should now start moving again
+                if(GameMaster.INSTANCE.state == GameMaster.State.PLAYER_MOVING)
+                {
+                    state = State.MOVING;
+
+                    DeleteSpotSelectionArrows();
+                    SelectIntermediary(GameMaster.INSTANCE.lastSelectedSpot);
+                }
                 break;
         }
     }
@@ -95,16 +112,57 @@ public class Player : MonoBehaviour {
         }
     }
 
+    void DeleteSpotSelectionArrows()
+    {
+        for(int i = 0; i < spotSelectionArrows.Count; ++i)
+        {
+            Destroy(spotSelectionArrows[i]);
+        }
+
+        spotSelectionArrows.Clear();
+        spotSelectionArrows = null;
+    }
+
     void RecalculateIntermediary()
     {
-        //intermediarySpot = (data.spot + 1) % GameMaster.INSTANCE.guard.boardSpots.Count;
-        intermediarySpot = data.GetSpot().next[0]; // TODO: allow the player to choose if there are multiple nexts.
-        Spot spot = data.GetSpot();
+        List<Spot> nextSpots = data.GetSpot().next;
+
+        Debug.Assert(nextSpots.Count > 0, string.Format("No next spot available for current spot (index {0})", data.GetSpot().index));
+
+        if(nextSpots.Count > 1)
+        {
+            GameMaster.INSTANCE.OnPlayerSelectingSpot();
+            state = State.SELECTING_SPOT;
+
+            spotSelectionArrows = new List<GameObject>(nextSpots.Count);
+
+            for (int i = 0; i < nextSpots.Count; ++i)
+            {
+                GameObject obj = Instantiate(selectSpotPrefab, new Vector3(0f, 13f, 0f), Quaternion.identity);
+
+                RectTransform transform = obj.GetComponent<RectTransform>();
+                transform.SetParent(nextSpots[i].transform, false);
+                transform.GetComponentInChildren<SelectSpotArrow>().spot = nextSpots[i];
+
+                spotSelectionArrows.Add(obj);
+            }
+
+            return;
+        }
+
+        SelectIntermediary(data.GetSpot().next[0]);
+    }
+
+    void SelectIntermediary(Spot spot)
+    {
+        intermediarySpot = spot;
+
+        Spot currentSpot = data.GetSpot();
 
         float highestDiff = Mathf.Max(
-            Mathf.Abs(spot.transform.position.x - intermediarySpot.transform.position.x),
-            Mathf.Abs(spot.transform.position.y - intermediarySpot.transform.position.y),
-            Mathf.Abs(spot.transform.position.z - intermediarySpot.transform.position.z));
+            Mathf.Abs(currentSpot.transform.position.x - intermediarySpot.transform.position.x),
+            Mathf.Abs(currentSpot.transform.position.y - intermediarySpot.transform.position.y),
+            Mathf.Abs(currentSpot.transform.position.z - intermediarySpot.transform.position.z));
 
         moveTime = highestDiff / SPEED;
 

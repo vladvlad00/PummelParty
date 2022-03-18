@@ -1,11 +1,10 @@
 /*
  * Bridge between Unity and Risa (C99). Designed for in-game consoles. 
  */
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 
 // Before the event system
 [DefaultExecutionOrder(-10000)]
@@ -81,6 +80,7 @@ public class Backport : MonoBehaviour
                 return;
             }
 
+            // Add the command to the history buffer. If it exists, move it to the head of the list
             LinkedListNode<string> it = history.Count > 0 ? history.First : null;
 
             while(it != null)

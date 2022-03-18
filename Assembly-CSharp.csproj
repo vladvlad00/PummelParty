@@ -67,6 +67,8 @@
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Backport\Backport.cs" />
     <Compile Include="Assets\Scripts\GameGuard.cs" />
+    <Compile Include="Assets\Scripts\UI\SelectSpotArrow.cs" />
+    <Compile Include="Assets\Scripts\UI\SelectSpot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

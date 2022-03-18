@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
+﻿// FLEX IT
 public static class TaleExtra
 {
     public static TaleUtil.Action FadeIn(float duration = 1f) =>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Should execute before GameGuard
 [DefaultExecutionOrder(0)]
 public class GameMaster : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameMaster : MonoBehaviour
     {
         IDLE,
         PLAYER_MOVING,
+        PLAYER_SELECTING_SPOT,
         MINIGAME,
         SPOT_MINIGAME_FINISHED
     }
@@ -36,8 +38,13 @@ public class GameMaster : MonoBehaviour
     [NonSerialized]
     public bool moveDirectionReversed;
 
+    [NonSerialized]
+    public Spot lastSelectedSpot;
+
+    [NonSerialized]
+    public State state;
+
     int currentPlayer;
-    State state;
 
     void Awake()
     {
@@ -70,6 +77,7 @@ public class GameMaster : MonoBehaviour
                 if(guard.players[currentPlayer].state == Player.State.IDLE)
                 {
                     state = State.IDLE;
+                    // Next turn
                     currentPlayer = (currentPlayer + 1) % guard.players.Count;
                     OnPlayerMovingEnd();
                 }
@@ -83,6 +91,8 @@ public class GameMaster : MonoBehaviour
                 {
                     state = State.IDLE;
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -124,10 +134,20 @@ public class GameMaster : MonoBehaviour
 
         guard.diceText.text = string.Format("You rolled <color=#880000>{0}</color>!", dice.ToString());
 
-        //int targetSpot = (playerData[currentPlayer].spot + dice) % guard.boardSpots.Count;
+        state = State.PLAYER_MOVING;
 
         guard.players[currentPlayer].SetInMotion(dice);
+    }
 
+    // The Player script will monitor the master state, so we don't have to do anything else.
+    public void OnPlayerSelectingSpot()
+    {
+        state = State.PLAYER_SELECTING_SPOT;
+    }
+
+    public void OnPlayerSelectedSpot(Spot spot)
+    {
+        lastSelectedSpot = spot;
         state = State.PLAYER_MOVING;
     }
 
