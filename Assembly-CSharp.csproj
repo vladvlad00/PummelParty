@@ -65,6 +65,8 @@
     <Compile Include="Assets\Scripts\Backport\Backport.cs" />
     <Compile Include="Assets\Scripts\GameGuard.cs" />
     <Compile Include="Assets\Scripts\Backport\BackportCommands.cs" />
+    <Compile Include="Assets\Scripts\Spot.cs" />
+    <Compile Include="Assets\Scripts\PlayerData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -1519,17 +1519,6 @@ namespace Risa
         }
 
         /// <summary>
-        /// Loads a native function.
-        /// </summary>
-        /// 
-        /// <param name="fn">The native function pointer.</param>
-        public void Load(ValueFunction fn)
-        {
-            C99.RisaVMLoadFunction(ptr, fn.ptr);
-            System.GC.KeepAlive(this);
-        }
-
-        /// <summary>
         /// Compiles and loads a string containing Risa source code.
         /// </summary>
         /// 

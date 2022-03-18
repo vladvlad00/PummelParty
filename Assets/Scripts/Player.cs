@@ -11,19 +11,16 @@ public class Player : MonoBehaviour {
 
     public const float SPEED = 7.5f; // Moving speed
 
-    public int id;
+    [NonSerialized]
+    public PlayerData data;
+
     [NonSerialized]
     public new Transform transform;
     [NonSerialized]
-    public int spot;
-    [NonSerialized]
     public State state;
 
-    [SerializeField]
-    GameMaster master;
-
-    int targetSpot;
-    int intermediarySpot;
+    int moveCount;
+    Spot intermediarySpot;
     float clock;
     float moveTime;
 
@@ -31,7 +28,6 @@ public class Player : MonoBehaviour {
     {
         transform = GetComponent<Transform>();
         clock = 0f;
-        spot = 0;
     }
 
     void Update()
@@ -46,13 +42,18 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void SetTargetSpot(int where)
+    public void SetInMotion(int count)
     {
-        Debug.Assert(where != spot, "SetTargetSpot() called with the same spot as the current one");
+        moveCount = count;
 
-        targetSpot = where;
         state = State.MOVING;
         RecalculateIntermediary();
+    }
+
+    public void Reposition()
+    {
+        Vector3 pos = data.GetSpot().transform.position;
+        transform.position = new Vector3(pos.x, transform.position.y, pos.z);
     }
 
     void Move()
@@ -71,17 +72,18 @@ public class Player : MonoBehaviour {
 
         // 0f -> base spot position
         // 1f -> intermediary spot position
-        Vector3 pos = TaleUtil.Math.Interpolate(master.boardSpots[spot].position, master.boardSpots[intermediarySpot].position, factor);
+        Vector3 pos = TaleUtil.Math.Interpolate(data.GetSpot().transform.position, intermediarySpot.transform.position, factor);
         pos.y = transform.position.y; // Preserve player Y
 
         transform.position = pos;
 
         if (factor == 1f)
         {
-            spot = intermediarySpot;
+            data.spot = intermediarySpot.index;
+            --moveCount;
             clock = 0f;
 
-            if(spot == targetSpot)
+            if(moveCount == 0)
             {
                 // Reached the target spot, stop moving
                 state = State.IDLE;
@@ -95,16 +97,18 @@ public class Player : MonoBehaviour {
 
     void RecalculateIntermediary()
     {
-        intermediarySpot = (spot + 1) % master.boardSpots.Count;
+        //intermediarySpot = (data.spot + 1) % GameMaster.INSTANCE.guard.boardSpots.Count;
+        intermediarySpot = data.GetSpot().next[0]; // TODO: allow the player to choose if there are multiple nexts.
+        Spot spot = data.GetSpot();
 
         float highestDiff = Mathf.Max(
-            Mathf.Abs(master.boardSpots[spot].position.x - master.boardSpots[intermediarySpot].position.x),
-            Mathf.Abs(master.boardSpots[spot].position.y - master.boardSpots[intermediarySpot].position.y),
-            Mathf.Abs(master.boardSpots[spot].position.z - master.boardSpots[intermediarySpot].position.z));
+            Mathf.Abs(spot.transform.position.x - intermediarySpot.transform.position.x),
+            Mathf.Abs(spot.transform.position.y - intermediarySpot.transform.position.y),
+            Mathf.Abs(spot.transform.position.z - intermediarySpot.transform.position.z));
 
         moveTime = highestDiff / SPEED;
 
-        float angle = MathSET.AngleBetween(master.boardSpots[intermediarySpot].position, transform.position);
+        float angle = MathSET.AngleBetween(intermediarySpot.transform.position, transform.position);
         transform.eulerAngles = new Vector3(0f, angle, 0);
     }
 }

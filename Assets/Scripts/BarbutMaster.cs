@@ -112,7 +112,7 @@ public class BarbutMaster : MonoBehaviour
                 playerRolls[j].dice2.text = roll2.ToString();
             }
 
-            List<Player> winners = new List<Player>();
+            List<PlayerData> winners = new List<PlayerData>();
 
             for (int j = 0; j < master.minigameTriggerPlayers.Count; ++j)
             {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(0)]
 public class GameMaster : MonoBehaviour
 {
     public enum State
@@ -21,19 +22,16 @@ public class GameMaster : MonoBehaviour
 
     public static GameMaster INSTANCE = null;
 
-    public GameObject board;
-    public List<Player> players;
+    public List<PlayerData> playerData;
 
     [NonSerialized]
     public GameGuard guard = null; // Holds stuff specific to the Game scene
-    [NonSerialized]
-    public List<Transform> boardSpots;
 
     [NonSerialized]
     public int minigameTriggerSpot; // The spot where the minigame was triggered
     [NonSerialized]
-    public List<Player> minigameTriggerPlayers; // The players on that spot;
-
+    public List<PlayerData> minigameTriggerPlayers; // The players on that spot;
+    [NonSerialized]
     public int rigDice = -1; // If it's between 1 and 6 then the dice will always yield this value
 
     int currentPlayer;
@@ -46,18 +44,6 @@ public class GameMaster : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        boardSpots = new List<Transform>();
-
-        foreach(Transform child in board.transform)
-        {
-            if(child.name.StartsWith("Spot"))
-            {
-                boardSpots.Add(child);
-            }
-        }
-
-        boardSpots.Sort((x, y) => x.name.CompareTo(y.name));
 
         currentPlayer = 0;
 
@@ -77,10 +63,10 @@ public class GameMaster : MonoBehaviour
                 WaitForPlayerMove();
                 break;
             case State.PLAYER_MOVING:
-                if(players[currentPlayer].state == Player.State.IDLE)
+                if(guard.players[currentPlayer].state == Player.State.IDLE)
                 {
                     state = State.IDLE;
-                    currentPlayer = (currentPlayer + 1) % players.Count;
+                    currentPlayer = (currentPlayer + 1) % guard.players.Count;
                     OnPlayerMovingEnd();
                 }
                 break;
@@ -128,9 +114,9 @@ public class GameMaster : MonoBehaviour
 
         guard.diceText.text = string.Format("You rolled <color=#880000>{0}</color>!", dice.ToString());
 
-        int targetSpot = (players[currentPlayer].spot + dice) % boardSpots.Count;
+        //int targetSpot = (playerData[currentPlayer].spot + dice) % guard.boardSpots.Count;
 
-        players[currentPlayer].SetTargetSpot(targetSpot);
+        guard.players[currentPlayer].SetInMotion(dice);
 
         state = State.PLAYER_MOVING;
     }
@@ -143,15 +129,15 @@ public class GameMaster : MonoBehaviour
 
     void TriggerMinigameOnSpot()
     {
-        for (; minigameTriggerSpot < boardSpots.Count; minigameTriggerSpot++)
+        for (; minigameTriggerSpot < guard.boardSpots.Count; minigameTriggerSpot++)
         {
-            minigameTriggerPlayers = new List<Player>();
+            minigameTriggerPlayers = new List<PlayerData>();
 
-            for (int j = 0; j < players.Count; ++j)
+            for (int j = 0; j < playerData.Count; ++j)
             {
-                if (players[j].spot == minigameTriggerSpot)
+                if (playerData[j].spot == minigameTriggerSpot)
                 {
-                    minigameTriggerPlayers.Add(players[j]);
+                    minigameTriggerPlayers.Add(playerData[j]);
                 }
             }
 
