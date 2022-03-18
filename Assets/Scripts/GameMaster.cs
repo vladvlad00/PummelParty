@@ -15,6 +15,11 @@ public class GameMaster : MonoBehaviour
         SPOT_MINIGAME_FINISHED
     }
 
+    public enum Minigame
+    {
+        DUMMY
+    }
+
     public static bool INPUT_ENABLED = true;
 
     public static GameMaster INSTANCE = null;
