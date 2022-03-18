@@ -63,6 +63,13 @@ public class Backport : MonoBehaviour
         // Enter -> execute
         input.onSubmit.AddListener((text) =>
         {
+            if(string.IsNullOrWhiteSpace(text))
+            {
+                input.text = "";
+                input.ActivateInputField();
+                return;
+            }
+
             if (!text.EndsWith(';'))
             {
                 // In case the user forgets the semicolon.
@@ -243,9 +250,26 @@ public class Backport : MonoBehaviour
         INSTANCE.output.text += text;
 
         // Scroll if the scrollbar was already scrolled to the max before, or if there was no space to scroll before (and now there is)
-        if (scrollToBottom && INSTANCE.output.verticalScrollbar.size != 1f)
+        if(INSTANCE.output.verticalScrollbar.size != 1f)
         {
-            INSTANCE.output.verticalScrollbar.value = 1f;
+            if (scrollToBottom)
+            {
+                INSTANCE.output.verticalScrollbar.value = 1f;
+            }
+
+            if(!INSTANCE.output.verticalScrollbar.gameObject.activeSelf)
+            {
+                // There's now space to scroll, show the scrollbar
+                INSTANCE.output.verticalScrollbar.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            // There's no space to scroll, hide the scrollbar
+            if (INSTANCE.output.verticalScrollbar.gameObject.activeSelf)
+            {
+                INSTANCE.output.verticalScrollbar.gameObject.SetActive(false);
+            }
         }
     }
 
