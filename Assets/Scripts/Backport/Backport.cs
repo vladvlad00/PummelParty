@@ -20,6 +20,8 @@ public class Backport : MonoBehaviour
 
     // If the VM enters an infinite loop, don't freeze the game.
     public static uint MAX_INSTRUCTIONS_PER_FRAME = 100;
+    // The number of commands to keep in the history buffer. Keep this a small number like 5 (otherwise major slowdowns may occur).
+    public static uint MAX_HISTORY_SIZE = 5;
     // If the command result is a function, execute that function automatically (so the user can simply write "clear").
     public static bool AUTOEXEC_ENABLE = true;
     // If a command result was executed as a function, and it returned another function, execute again.
@@ -46,6 +48,9 @@ public class Backport : MonoBehaviour
 
     State state;
     int lineCount;
+
+    LinkedList<string> history;
+    LinkedListNode<string> currentHistoryNode;
 
     void Awake()
     {
@@ -76,6 +81,27 @@ public class Backport : MonoBehaviour
                 return;
             }
 
+            LinkedListNode<string> it = history.Count > 0 ? history.First : null;
+
+            while(it != null)
+            {
+                if(text == it.Value)
+                {
+                    history.Remove(it);
+                    break;
+                }
+
+                it = it.Next;
+            }
+
+            history.AddFirst(text);
+            currentHistoryNode = null;
+
+            if (history.Count > MAX_HISTORY_SIZE)
+            {
+                history.RemoveLast();
+            }
+
             if (!text.EndsWith(';'))
             {
                 // In case the user forgets the semicolon.
@@ -94,10 +120,9 @@ public class Backport : MonoBehaviour
             }
         });
 
-        lineCount = 1;
-        WriteVersion();
-
         Risa.ValueObject backport = vm.CreateObject();
+        backport.Set("max_instructions", vm.CreateNative(MaxInstructions));
+        backport.Set("history_size", vm.CreateNative(HistorySize));
         backport.Set("line_limit", vm.CreateNative(LineLimit));
         backport.Set("autoexec", vm.CreateNative(Autoexec));
         backport.Set("autoexec_repeat", vm.CreateNative(AutoexecRepeat));
@@ -107,6 +132,12 @@ public class Backport : MonoBehaviour
         vm.LoadGlobalNative("clear", Clear);
 
         BackportCommands.Init();
+
+        history = new LinkedList<string>();
+        currentHistoryNode = null;
+
+        lineCount = 1;
+        WriteVersion();
 
         DontDestroyOnLoad(gameObject);
     }
@@ -156,6 +187,40 @@ public class Backport : MonoBehaviour
             state = State.IDLE;
             WriteError("-- interrupted --");
             OnExecutionEnd(false);
+        }
+        else if(IsOpen() && input.isActiveAndEnabled && input.isFocused)
+        {
+            if (history.Count == 0)
+            {
+                return;
+            }
+
+            if (GetKeyDownNoMod(KeyCode.UpArrow))
+            {
+                if (currentHistoryNode == null || currentHistoryNode.Value != input.text)
+                {
+                    currentHistoryNode = history.First;
+                }
+                else
+                {
+                    currentHistoryNode = currentHistoryNode.Next != null ? currentHistoryNode.Next : history.First;
+                }
+
+                input.text = currentHistoryNode.Value;
+            }
+            else if(GetKeyDownNoMod(KeyCode.DownArrow))
+            {
+                if (currentHistoryNode == null || currentHistoryNode.Value != input.text)
+                {
+                    currentHistoryNode = history.Last;
+                }
+                else
+                {
+                    currentHistoryNode = currentHistoryNode.Previous != null ? currentHistoryNode.Previous : history.Last;
+                }
+
+                input.text = currentHistoryNode.Value;
+            }
         }
     }
 
@@ -384,6 +449,62 @@ public class Backport : MonoBehaviour
         }
     }
 
+    static Risa.Value MaxInstructions(Risa.VM vm, Risa.Args args)
+    {
+        if (args.Count() == 0)
+        {
+            return vm.CreateInt(MAX_INSTRUCTIONS_PER_FRAME);
+        }
+
+        if (args.Count() > 1 || !args.Get(0).IsInt())
+        {
+            WriteError("Invalid arguments for max_instructions (expected an int >= 0)");
+            return Risa.Value.NULL;
+        }
+
+        int value = (int)args.Get(0).AsInt();
+
+        if (value < 0)
+        {
+            WriteError("Invalid arguments for max_instructions (expected an int >= 0)");
+            return Risa.Value.NULL;
+        }
+
+        MAX_INSTRUCTIONS_PER_FRAME = (uint)value;
+        return vm.CreateInt(MAX_INSTRUCTIONS_PER_FRAME);
+    }
+
+    static Risa.Value HistorySize(Risa.VM vm, Risa.Args args)
+    {
+        if (args.Count() == 0)
+        {
+            return vm.CreateInt(MAX_HISTORY_SIZE);
+        }
+
+        if (args.Count() > 1 || !args.Get(0).IsInt())
+        {
+            WriteError("Invalid arguments for history_size (expected an int > 0)");
+            return Risa.Value.NULL;
+        }
+
+        int value = (int)args.Get(0).AsInt();
+
+        if (value <= 0)
+        {
+            WriteError("Invalid arguments for history_size (expected an int > 0)");
+            return Risa.Value.NULL;
+        }
+
+        // Ensure that the history size doesn't exceed the limit
+        while (INSTANCE.history.Count > value)
+        {
+            INSTANCE.history.RemoveLast();
+        }
+
+        MAX_HISTORY_SIZE = (uint)value;
+        return vm.CreateInt(MAX_HISTORY_SIZE);
+    }
+
     static Risa.Value LineLimit(Risa.VM  vm, Risa.Args args)
     {
         if(args.Count() == 0)
@@ -399,7 +520,7 @@ public class Backport : MonoBehaviour
 
         int value = (int)args.Get(0).AsInt();
 
-        if(value == 0)
+        if(value <= 0)
         {
             WriteError("Invalid arguments for line_limit (expected an int > 0)");
             return Risa.Value.NULL;

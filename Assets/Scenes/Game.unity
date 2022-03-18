@@ -1906,6 +1906,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Backport
       objectReference: {fileID: 0}
+    - target: {fileID: 4386490262650242247, guid: fd3069e89668023498c1a89f5f0a5bd4, type: 3}
+      propertyPath: m_RestoreOriginalTextOnEscape
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd3069e89668023498c1a89f5f0a5bd4, type: 3}
 --- !u!1001 &4968450064656347232
