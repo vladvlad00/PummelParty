@@ -32,7 +32,9 @@ public class GameMaster : MonoBehaviour
     [NonSerialized]
     public List<PlayerData> minigameTriggerPlayers; // The players on that spot;
     [NonSerialized]
-    public int rigDice = -1; // If it's between 1 and 6 then the dice will always yield this value
+    public int rigDice; // If it's between 1 and 6 then the dice will always yield this value
+    [NonSerialized]
+    public bool moveDirectionReversed;
 
     int currentPlayer;
     State state;
@@ -45,8 +47,10 @@ public class GameMaster : MonoBehaviour
             return;
         }
 
-        currentPlayer = 0;
+        rigDice = -1;
+        moveDirectionReversed = false;
 
+        currentPlayer = 0;
         state = State.IDLE;
 
         OnReturnToGame();
@@ -98,6 +102,12 @@ public class GameMaster : MonoBehaviour
     public void OnReturnToGame()
     {
         guard = GameGuard.INSTANCE;
+
+        if(moveDirectionReversed)
+        {
+            ReverseMoveDirection(); // The board isn't reversed, while moveDirectionReserved is true, so fix that
+            moveDirectionReversed = true;
+        }
     }
 
     void WaitForPlayerMove()
@@ -156,5 +166,52 @@ public class GameMaster : MonoBehaviour
         }
 
         guard.diceText.text = "Press <color=#880000>space</color> to roll!";
+    }
+
+    // Reverse the direction in which the players move
+    public void ReverseMoveDirection()
+    {
+        Dictionary<int, HashSet<int>> processedSpots = new Dictionary<int, HashSet<int>>();
+        Queue<Spot> queue = new Queue<Spot>();
+
+        queue.Enqueue(guard.startingSpot);
+
+        while (queue.Count > 0)
+        {
+            if(!processedSpots.ContainsKey(queue.Peek().index))
+            {
+                processedSpots[queue.Peek().index] = new HashSet<int>();
+            }
+
+            for(int i = 0; i < queue.Peek().next.Count;)
+            {
+                Spot spot = queue.Peek().next[i];
+
+                if(!processedSpots[queue.Peek().index].Contains(spot.index))
+                {
+                    queue.Enqueue(spot);
+
+                    Debug.Assert(!spot.next.Contains(queue.Peek()), "2-node cycle detected; two spots cannot have each other as the next");
+                    spot.next.Add(queue.Peek());
+
+                    queue.Peek().next.RemoveAt(i);
+
+                    if (!processedSpots.ContainsKey(spot.index))
+                    {
+                        processedSpots[spot.index] = new HashSet<int>();
+                    }
+
+                    processedSpots[spot.index].Add(queue.Peek().index);
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+
+            queue.Dequeue();
+        }
+
+        moveDirectionReversed = !moveDirectionReversed;
     }
 }

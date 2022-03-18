@@ -60,13 +60,13 @@
     <Compile Include="Assets\Scripts\GameMaster.cs" />
     <Compile Include="Assets\Scripts\Lib\MathSET.cs" />
     <Compile Include="Assets\Scripts\TaleExtra\TaleExtra.cs" />
+    <Compile Include="Assets\Scripts\Backport\BackportCommands.cs" />
+    <Compile Include="Assets\Scripts\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Spot.cs" />
     <Compile Include="Assets\Scripts\Backport\Risa\Risa.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Backport\Backport.cs" />
     <Compile Include="Assets\Scripts\GameGuard.cs" />
-    <Compile Include="Assets\Scripts\Backport\BackportCommands.cs" />
-    <Compile Include="Assets\Scripts\Spot.cs" />
-    <Compile Include="Assets\Scripts\PlayerData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
