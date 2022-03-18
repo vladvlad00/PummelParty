@@ -1,6 +1,3 @@
-//#define MINIGAME_SPOT_DEBUG
-// TODO: Replace this directive with something else (like a Backport command?)
-// TODO: Integrate Backport
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +33,8 @@ public class GameMaster : MonoBehaviour
     public int minigameTriggerSpot; // The spot where the minigame was triggered
     [NonSerialized]
     public List<Player> minigameTriggerPlayers; // The players on that spot;
+
+    public int rigDice = -1; // If it's between 1 and 6 then the dice will always yield this value
 
     int currentPlayer;
     State state;
@@ -98,6 +97,11 @@ public class GameMaster : MonoBehaviour
         }
     }
 
+    public static bool InputEnabled()
+    {
+        return INPUT_ENABLED && !Backport.IsOpen();
+    }
+
     public void OnSpotMinigameEnd()
     {
         state = State.SPOT_MINIGAME_FINISHED;
@@ -112,7 +116,7 @@ public class GameMaster : MonoBehaviour
 
     void WaitForPlayerMove()
     {
-        if (INPUT_ENABLED && Input.GetKeyDown("space"))
+        if (InputEnabled() && Input.GetKeyDown("space"))
         {
             OnPlayerRoll();
         }
@@ -120,11 +124,7 @@ public class GameMaster : MonoBehaviour
 
     void OnPlayerRoll()
     {
-#if MINIGAME_SPOT_DEBUG
-        int dice = 2;
-#else
-        int dice = UnityEngine.Random.Range(1, 7);
-#endif
+        int dice = (rigDice >= 1 && rigDice <= 6) ? rigDice : UnityEngine.Random.Range(1, 7);
 
         guard.diceText.text = string.Format("You rolled <color=#880000>{0}</color>!", dice.ToString());
 

@@ -991,6 +991,11 @@ namespace Risa
         public bool IsFunction() => GetType() == Type.FUNCTION;
 
         /// <summary>
+        /// Returns whether or not the valie is of type function and is a native function.
+        /// </summary>
+        public bool IsNative() => IsFunction() && C99.RisaDenseGetType(data.asDense) == C99.RisaDenseValueType.RISA_DVAL_NATIVE;
+
+        /// <summary>
         /// Casts the value to bool.
         /// </summary>
         public bool AsBool()
@@ -1510,6 +1515,17 @@ namespace Risa
         public void Load(CompiledScript script)
         {
             C99.RisaVMLoadFunction(ptr, script.function.ptr);
+            System.GC.KeepAlive(this);
+        }
+
+        /// <summary>
+        /// Loads a native function.
+        /// </summary>
+        /// 
+        /// <param name="fn">The native function pointer.</param>
+        public void Load(ValueFunction fn)
+        {
+            C99.RisaVMLoadFunction(ptr, fn.ptr);
             System.GC.KeepAlive(this);
         }
 

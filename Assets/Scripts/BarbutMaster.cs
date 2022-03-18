@@ -90,7 +90,7 @@ public class BarbutMaster : MonoBehaviour
 
     void WaitForInput()
     {
-        if(GameMaster.INPUT_ENABLED && Input.GetKeyDown(KeyCode.Space))
+        if(GameMaster.InputEnabled() && Input.GetKeyDown(KeyCode.Space))
         {
             promptCanvas.SetActive(false);
 
@@ -129,7 +129,7 @@ public class BarbutMaster : MonoBehaviour
 
     void Results()
     {
-        if (GameMaster.INPUT_ENABLED && Input.GetKeyDown(KeyCode.Space))
+        if (GameMaster.InputEnabled() && Input.GetKeyDown(KeyCode.Space))
         {
             master.OnSpotMinigameEnd();
 
