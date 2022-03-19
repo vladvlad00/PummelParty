@@ -5,6 +5,7 @@ using System;
 public class PlayerData
 {
     public int id;
+    public string name;
     [NonSerialized]
     public int spot = -1;
 

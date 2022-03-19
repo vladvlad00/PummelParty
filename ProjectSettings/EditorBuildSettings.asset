@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Barbut.unity
     guid: f086502c658e031498a50ff93391d830
+  - enabled: 1
+    path: Assets/Scenes/Minigames/HopRace.unity
+    guid: 473ef6926c8241045a56e55fa77ec3e1
+  - enabled: 1
+    path: Assets/Scenes/Minigames/Scoreboard.unity
+    guid: 2d347e2224a6a954d897d544bc21527b
   m_configObjects: {}

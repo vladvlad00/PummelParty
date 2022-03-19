@@ -12,7 +12,28 @@ public static class TaleExtra
         TaleUtil.Queue.Enqueue(new TaleUtil.TransitionAction("Rip", TaleUtil.TransitionAction.Type.OUT, duration));
 
     public static TaleUtil.Action ReturnToGame() =>
-        TaleUtil.Queue.Enqueue(new TaleUtil.SceneAction("Game"));
+        TaleUtil.Queue.Enqueue(new TaleUtil.SceneAction("Scenes/Game"));
+
+    public static void MinigameScoreboard()
+    {
+        DisableInput();
+        RipOut();
+        Tale.Scene("Scenes/Minigames/Scoreboard");
+        RipIn();
+        EnableInput();
+    }
+
+    public static void ReturnFromMinigame()
+    {
+        DisableInput();
+        RipOut();
+        ReturnToGame();
+        RipIn();
+        EnableInput();
+    }
+
+    public static TaleUtil.Action SpotMinigameEnd() =>
+        TaleUtil.Queue.Enqueue(new TaleUtil.ExecAction(() => GameMaster.INSTANCE.OnSpotMinigameEnd()));
 
     public static TaleUtil.Action DisableInput() =>
         TaleUtil.Queue.Enqueue(new TaleUtil.ExecAction(() =>

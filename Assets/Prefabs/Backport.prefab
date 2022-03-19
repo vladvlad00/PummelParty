@@ -1194,7 +1194,7 @@ MonoBehaviour:
   m_GlobalFontAsset: {fileID: 11400000, guid: d5012cbf9452d914fafeedfc2236ab8c, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
-  m_RestoreOriginalTextOnEscape: 1
+  m_RestoreOriginalTextOnEscape: 0
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}

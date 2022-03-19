@@ -12,12 +12,15 @@ public class GameMaster : MonoBehaviour
         PLAYER_MOVING,
         PLAYER_SELECTING_SPOT,
         MINIGAME,
+        SPOT_MINIGAME,
         SPOT_MINIGAME_FINISHED
     }
 
     public enum Minigame
     {
-        DUMMY
+        // Inconsistent with UPPER_SNAKE_CASE, but needed since ToString() has to yield a valid Scene name
+        // (HopRace, because HOP_RACE is a weird scene name)
+        HopRace
     }
 
     public static bool INPUT_ENABLED = true;
@@ -32,17 +35,22 @@ public class GameMaster : MonoBehaviour
     [NonSerialized]
     public int minigameTriggerSpot; // The spot where the minigame was triggered
     [NonSerialized]
-    public List<PlayerData> minigameTriggerPlayers; // The players on that spot;
+    public List<PlayerData> minigamePlayers;
     [NonSerialized]
     public int rigDice; // If it's between 1 and 6 then the dice will always yield this value
     [NonSerialized]
     public bool moveDirectionReversed;
 
     [NonSerialized]
+    public List<PlayerData> minigameScoreboard;
+
+    [NonSerialized]
     public Spot lastSelectedSpot;
 
     [NonSerialized]
     public State state;
+    [NonSerialized]
+    public Minigame minigame;
 
     int currentPlayer;
 
@@ -83,6 +91,7 @@ public class GameMaster : MonoBehaviour
                 }
                 break;
             case State.MINIGAME:
+            case State.SPOT_MINIGAME:
                 break;
             case State.SPOT_MINIGAME_FINISHED:
                 TriggerMinigameOnSpot(); // Check for additional spots with multiple players
@@ -117,6 +126,15 @@ public class GameMaster : MonoBehaviour
         {
             ReverseMoveDirection(); // The board isn't reversed, while moveDirectionReserved is true, so fix that
             moveDirectionReversed = true;
+        }
+
+        if(state == State.SPOT_MINIGAME)
+        {
+            OnSpotMinigameEnd();
+        }
+        else
+        {
+            state = State.IDLE;
         }
     }
 
@@ -161,31 +179,40 @@ public class GameMaster : MonoBehaviour
     {
         for (; minigameTriggerSpot < guard.boardSpots.Count; minigameTriggerSpot++)
         {
-            minigameTriggerPlayers = new List<PlayerData>();
+            minigamePlayers = new List<PlayerData>();
 
             for (int j = 0; j < playerData.Count; ++j)
             {
                 if (playerData[j].spot == minigameTriggerSpot)
                 {
-                    minigameTriggerPlayers.Add(playerData[j]);
+                    minigamePlayers.Add(playerData[j]);
                 }
             }
 
-            if (minigameTriggerPlayers.Count > 1)
+            if (minigamePlayers.Count > 1)
             {
-                state = State.MINIGAME;
-
-                TaleExtra.DisableInput();
-                TaleExtra.RipOut();
-                Tale.Scene("Barbut");
-                TaleExtra.RipIn();
-                TaleExtra.EnableInput();
+                // TODO: random minigame
+                TriggerMinigame(Minigame.HopRace, minigamePlayers);
 
                 return;
             }
         }
 
         guard.diceText.text = "Press <color=#880000>space</color> to roll!";
+    }
+
+    public void TriggerMinigame(Minigame minigame, List<PlayerData> players)
+    {
+        this.minigame = minigame;
+        minigamePlayers = players;
+
+        state = State.MINIGAME;
+
+        TaleExtra.DisableInput();
+        TaleExtra.RipOut();
+        Tale.Scene(string.Format("Scenes/Minigames/{0}", minigame.ToString()));
+        TaleExtra.RipIn();
+        TaleExtra.EnableInput();
     }
 
     // Reverse the direction in which the players move

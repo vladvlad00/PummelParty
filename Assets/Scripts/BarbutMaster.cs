@@ -55,7 +55,7 @@ public class BarbutMaster : MonoBehaviour
 
         Vector3 basePos = new Vector3(-860f, 460f, 0f);
 
-        for(int i = 0; i < master.minigameTriggerPlayers.Count; ++i)
+        for(int i = 0; i < master.minigamePlayers.Count; ++i)
         {
             GameObject obj = Instantiate(playerRollPrefab, basePos, Quaternion.identity);
 
@@ -69,7 +69,7 @@ public class BarbutMaster : MonoBehaviour
 
             );
 
-            playerRolls[i].name.text = string.Format("Player {0}", master.minigameTriggerPlayers[i].id);
+            playerRolls[i].name.text = string.Format("Player {0}", master.minigamePlayers[i].id);
 
             basePos.y -= PLAYER_ROLL_Y_DIFF;
         }
@@ -97,7 +97,7 @@ public class BarbutMaster : MonoBehaviour
             List<int> rollSums = new List<int>();
             int maxIndex = -1;
 
-            for (int j = 0; j < master.minigameTriggerPlayers.Count; ++j)
+            for (int j = 0; j < master.minigamePlayers.Count; ++j)
             {
                 int roll1 = UnityEngine.Random.Range(1, 7);
                 int roll2 = UnityEngine.Random.Range(1, 7);
@@ -114,12 +114,12 @@ public class BarbutMaster : MonoBehaviour
 
             List<PlayerData> winners = new List<PlayerData>();
 
-            for (int j = 0; j < master.minigameTriggerPlayers.Count; ++j)
+            for (int j = 0; j < master.minigamePlayers.Count; ++j)
             {
                 if (rollSums[j] == rollSums[maxIndex])
                 {
                     playerRolls[j].name.text = string.Format("<color=#008800>{0}</color>", playerRolls[j].name.text);
-                    winners.Add(master.minigameTriggerPlayers[j]);
+                    winners.Add(master.minigamePlayers[j]);
                 }
             }
 
@@ -129,15 +129,9 @@ public class BarbutMaster : MonoBehaviour
 
     void Results()
     {
-        if (GameMaster.InputEnabled() && Input.GetKeyDown(KeyCode.Space))
+        if (InputMaster.GetKeyDown(KeyCode.Space))
         {
-            master.OnSpotMinigameEnd();
-
-            TaleExtra.DisableInput();
-            TaleExtra.RipOut();
-            TaleExtra.ReturnToGame();
-            TaleExtra.RipIn();
-            TaleExtra.EnableInput();
+            TaleExtra.ReturnFromMinigame();
         }
     }
 }

@@ -58,17 +58,24 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BarbutMaster.cs" />
     <Compile Include="Assets\Scripts\GameMaster.cs" />
+    <Compile Include="Assets\Scripts\InputMaster.cs" />
     <Compile Include="Assets\Scripts\Lib\MathSET.cs" />
     <Compile Include="Assets\Scripts\TaleExtra\TaleExtra.cs" />
     <Compile Include="Assets\Scripts\Backport\BackportCommands.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\UI\SelectSpot.cs" />
     <Compile Include="Assets\Scripts\Spot.cs" />
+    <Compile Include="Assets\Scripts\InputSensor.cs" />
+    <Compile Include="Assets\Scripts\Minigames\MinigameMaster.cs" />
     <Compile Include="Assets\Scripts\Backport\Risa\Risa.cs" />
+    <Compile Include="Assets\Scripts\Minigames\HopRace\HopRaceFinishLine.cs" />
+    <Compile Include="Assets\Scripts\Minigames\HopRace\HopRacePlayer.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Backport\Backport.cs" />
-    <Compile Include="Assets\Scripts\GameGuard.cs" />
     <Compile Include="Assets\Scripts\UI\SelectSpotArrow.cs" />
-    <Compile Include="Assets\Scripts\UI\SelectSpot.cs" />
+    <Compile Include="Assets\Scripts\Minigames\HopRace\HopRaceMaster.cs" />
+    <Compile Include="Assets\Scripts\GameGuard.cs" />
+    <Compile Include="Assets\Scripts\Minigames\ScoreboardMaster.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
