@@ -229,6 +229,11 @@ public class Backport : MonoBehaviour
         input.readOnly = true;
         inputPrefix.SetActive(false);
 
+        if(!output.text.EndsWith("\n"))
+        {
+            WriteLine("");
+        }
+
         WriteLine(string.Format("> {0}", input.text));
 
         input.text = "";
