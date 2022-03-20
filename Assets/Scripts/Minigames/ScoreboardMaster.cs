@@ -5,7 +5,7 @@ using TMPro;
 
 public class ScoreboardMaster : MonoBehaviour
 {
-    public const float PLAYER_PLACEMENT_Y_DIFF = 1.5f;
+    public const float PLAYER_PLACEMENT_Y_DIFF = 1f;
     public static readonly string[] PLAYER_PLACEMENT_COLORS = new string[]
     {
         "FFC53A",

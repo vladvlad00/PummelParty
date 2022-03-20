@@ -39,6 +39,8 @@ public class GameMaster : MonoBehaviour
     [NonSerialized]
     public int rigDice; // If it's between 1 and 6 then the dice will always yield this value
     [NonSerialized]
+    public string rigMinigame; // If it's set to a valid minigame, that minigame will always be selected
+    [NonSerialized]
     public bool moveDirectionReversed;
 
     [NonSerialized]
@@ -63,6 +65,7 @@ public class GameMaster : MonoBehaviour
         }
 
         rigDice = -1;
+        rigMinigame = null;
         moveDirectionReversed = false;
 
         currentPlayer = 0;
@@ -191,9 +194,16 @@ public class GameMaster : MonoBehaviour
 
             if (minigamePlayers.Count > 1)
             {
-                // TODO: random minigame
-                TriggerMinigame(Minigame.HopRace, minigamePlayers);
+                Minigame minigame = Minigame.HopRace;
 
+                // If it's not rigged, choose a random minigame. Otherwise, TryParse will set the rigged minigame
+                if(string.IsNullOrWhiteSpace(rigMinigame) || !Enum.TryParse<Minigame>(rigMinigame, true, out minigame))
+                {
+                    Array pool = Enum.GetValues(typeof(Minigame));
+                    minigame = (Minigame)pool.GetValue(UnityEngine.Random.Range(0, pool.Length));
+                }
+
+                TriggerMinigame(minigame, minigamePlayers);
                 return;
             }
         }
