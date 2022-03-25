@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigames/Scoreboard.unity
     guid: 2d347e2224a6a954d897d544bc21527b
+  - enabled: 1
+    path: Assets/Scenes/Minigames/Baseball.unity
+    guid: 1fe8ac47e88e1ca43af074b48a0b2f99
   m_configObjects: {}
