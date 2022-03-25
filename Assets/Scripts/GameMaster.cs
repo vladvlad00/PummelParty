@@ -20,7 +20,8 @@ public class GameMaster : MonoBehaviour
     {
         // Inconsistent with UPPER_SNAKE_CASE, but needed since ToString() has to yield a valid Scene name
         // (HopRace, because HOP_RACE is a weird scene name)
-        HopRace
+        HopRace,
+        MeteorRain
     }
 
     public static bool INPUT_ENABLED = true;
