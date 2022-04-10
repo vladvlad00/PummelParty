@@ -91,9 +91,12 @@ public class GameMaster : MonoBehaviour
                 if(guard.players[currentPlayer].state == Player.State.IDLE)
                 {
                     state = State.IDLE;
-                    // Next turn
-                    currentPlayer = (currentPlayer + 1) % guard.players.Count;
                     OnPlayerMovingEnd();
+
+                    if(state ==  State.IDLE)
+                    {
+                        OnTurnEnd();
+                    }
                 }
                 break;
             case State.MINIGAME:
@@ -121,6 +124,20 @@ public class GameMaster : MonoBehaviour
     {
         state = State.SPOT_MINIGAME_FINISHED;
         ++minigameTriggerSpot;
+    }
+
+    void OnTurnEnd()
+    {
+        if(ShouldPlayerWin(playerData[currentPlayer]))
+        {
+            Debug.Log(string.Format("Player {0} won!!!!!!!!!!!!!!!!!!!!!!!!!!!!", currentPlayer));
+            Debug.Break();
+        }
+
+        playerData[currentPlayer].TakeDamage(10);
+
+        // Next turn
+        currentPlayer = (currentPlayer + 1) % guard.players.Count;
     }
 
     // Minigame -> Game scene
@@ -179,6 +196,11 @@ public class GameMaster : MonoBehaviour
     {
         minigameTriggerSpot = 0;
         TriggerMinigameOnSpot();
+    }
+
+    public bool ShouldPlayerWin(PlayerData player)
+    {
+        return player.crowns >= 3;
     }
 
     void TriggerMinigameOnSpot()
