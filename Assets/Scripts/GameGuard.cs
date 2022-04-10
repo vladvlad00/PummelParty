@@ -22,6 +22,14 @@ public class GameGuard : MonoBehaviour
 
     public Material normalSpotMaterial;
     public Material crownSpotMaterial;
+    public Material reverseSpotMaterial;
+    public Material hpplusSpotMaterial;
+    public Material hpminusSpotMaterial;
+    public Material coinsSpotMaterial;
+    public Material teleportSpotMaterial;
+    public Material respawnSpotMaterial;
+    public Material itemSpotMaterial;
+    public Material startSpotMaterial;
 
     void Awake()
     {
