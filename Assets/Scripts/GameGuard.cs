@@ -18,7 +18,7 @@ public class GameGuard : MonoBehaviour
     public List<Spot> boardSpots;
 
     public Spot startingSpot;
-    public Spot graveyardSpot;
+    public List<Spot> graveyardSpots;
 
     public Material normalSpotMaterial;
     public Material crownSpotMaterial;
@@ -63,5 +63,25 @@ public class GameGuard : MonoBehaviour
             players[i].data = GameMaster.INSTANCE.playerData[i];
             players[i].Reposition();
         }
+    }
+
+    public bool IsGraveyard(Spot spot)
+    {
+        return graveyardSpots.Contains(spot);
+    }
+
+    public Spot GetRandomGraveyard()
+    {
+        return graveyardSpots[UnityEngine.Random.Range(0, graveyardSpots.Count)];
+    }
+
+    public Spot GetRandomSpot(bool includeCrown = false)
+    {
+        Spot spot = graveyardSpots[UnityEngine.Random.Range(0, graveyardSpots.Count)];
+        while (IsGraveyard(spot) || (spot == GameMaster.INSTANCE.crownSpot && includeCrown))
+        {
+            spot = graveyardSpots[UnityEngine.Random.Range(0, graveyardSpots.Count)];
+        }
+        return spot;
     }
 }

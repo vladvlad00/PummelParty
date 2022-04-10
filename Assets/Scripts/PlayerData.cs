@@ -17,6 +17,9 @@ public class PlayerData
     public int crowns = 0;
 
     [NonSerialized]
+    public int coins = 0;
+
+    [NonSerialized]
     public int hp = MAX_HP;
 
     [NonSerialized]
@@ -28,24 +31,28 @@ public class PlayerData
         return GameGuard.INSTANCE.boardSpots[spot];
     }
 
-    public void TakeDamage(int amount)
-    {
-        hp -= amount;
-
-        if(hp <= 0)
-        {
-            TeleportToSpot(GameMaster.INSTANCE.guard.graveyardSpot);
-
-            hp = MAX_HP;
-        }
-    }
-
-    void TeleportToSpot(Spot spot)
+    public void TeleportToSpot(Spot spot)
     {
         this.spot = spot.index;
         Transform transform = GameMaster.INSTANCE.guard.players[id].transform;
 
         // Preserve player Y
         transform.position = new Vector3(spot.transform.position.x, transform.position.y, spot.transform.position.z);
+    }
+
+    public void ModifyHP(int value)
+    {
+        hp += value;
+        if (hp > MAX_HP)
+        {
+            hp = MAX_HP;
+        }
+
+        if (hp <= 0)
+        {
+            TeleportToSpot(GameMaster.INSTANCE.guard.GetRandomGraveyard());
+
+            hp = MAX_HP;
+        }
     }
 }

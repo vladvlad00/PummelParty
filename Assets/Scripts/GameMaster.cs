@@ -150,7 +150,7 @@ public class GameMaster : MonoBehaviour
         {
             int index = UnityEngine.Random.Range(0, guard.boardSpots.Count);
 
-            if(guard.boardSpots[index] != guard.startingSpot && guard.boardSpots[index] != guard.graveyardSpot && guard.boardSpots[index] != crownSpot)
+            if(guard.boardSpots[index] != guard.startingSpot && !guard.IsGraveyard(guard.boardSpots[index]) && guard.boardSpots[index] != crownSpot)
             {
                 bool playerOnSpot = false;
                 for(int i = 0; i < playerData.Count; ++i)
