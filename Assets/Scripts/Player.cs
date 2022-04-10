@@ -125,6 +125,12 @@ public class Player : MonoBehaviour {
                     case Spot.Type.HP_MINUS:
                         data.ModifyHP(-10);
                         break;
+                    case Spot.Type.ITEM:
+                        // Add item :)
+                        break;
+                    case Spot.Type.COINS:
+                        data.ModifyCoins(UnityEngine.Random.Range(10, 30));
+                        break;
                 }
                 state = State.IDLE;
             }

@@ -55,4 +55,19 @@ public class PlayerData
             hp = MAX_HP;
         }
     }
+
+    public void ModifyCoins(int value)
+    {
+        coins += value;
+
+        if (coins < 0)
+        {
+            coins = 0;
+        }
+    }
+
+    public bool HasCoins(int value)
+    {
+        return coins >= value;
+    }
 }

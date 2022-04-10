@@ -77,10 +77,10 @@ public class GameGuard : MonoBehaviour
 
     public Spot GetRandomSpot(bool includeCrown = false)
     {
-        Spot spot = graveyardSpots[UnityEngine.Random.Range(0, graveyardSpots.Count)];
+        Spot spot = boardSpots[UnityEngine.Random.Range(0, boardSpots.Count)];
         while (IsGraveyard(spot) || (spot == GameMaster.INSTANCE.crownSpot && includeCrown))
         {
-            spot = graveyardSpots[UnityEngine.Random.Range(0, graveyardSpots.Count)];
+            spot = boardSpots[UnityEngine.Random.Range(0, boardSpots.Count)];
         }
         return spot;
     }
