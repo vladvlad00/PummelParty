@@ -235,9 +235,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData:
-  - id: 1
+  - id: 0
     name: Player 1
-  - id: 2
+  - id: 1
     name: Player 2
 --- !u!4 &320208061
 Transform:
@@ -453,6 +453,7 @@ MonoBehaviour:
   - {fileID: 1161643780}
   - {fileID: 1110351946}
   startingSpot: {fileID: 2005418974}
+  graveyardSpot: {fileID: 1759283739}
 --- !u!4 &425284063
 Transform:
   m_ObjectHideFlags: 0
