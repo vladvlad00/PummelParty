@@ -454,6 +454,8 @@ MonoBehaviour:
   - {fileID: 1110351946}
   startingSpot: {fileID: 2005418974}
   graveyardSpot: {fileID: 1759283739}
+  normalSpotMaterial: {fileID: 2100000, guid: daad781b222fa524ea9143e13b3f1b8b, type: 2}
+  crownSpotMaterial: {fileID: 2100000, guid: 95be11f357198e448ae5c39b7c13a355, type: 2}
 --- !u!4 &425284063
 Transform:
   m_ObjectHideFlags: 0

@@ -100,6 +100,15 @@ public class Player : MonoBehaviour {
             --moveCount;
             clock = 0f;
 
+            if(intermediarySpot.type == Spot.Type.CROWN)
+            {
+                intermediarySpot.ChangeType(Spot.Type.NORMAL);
+
+                moveCount = 0;
+                ++data.crowns;
+                GameMaster.INSTANCE.ChooseNewCrownSpot();
+            }
+
             if(moveCount == 0)
             {
                 // Reached the target spot, stop moving

@@ -20,6 +20,9 @@ public class GameGuard : MonoBehaviour
     public Spot startingSpot;
     public Spot graveyardSpot;
 
+    public Material normalSpotMaterial;
+    public Material crownSpotMaterial;
+
     void Awake()
     {
         INSTANCE = this;

@@ -52,6 +52,11 @@ public class GameMaster : MonoBehaviour
     public Spot lastSelectedSpot;
 
     [NonSerialized]
+    public Spot crownSpot = null;
+    [NonSerialized]
+    public Vector3 crownSpotPos = new Vector3(-9999f, 0f, 0f);
+
+    [NonSerialized]
     public State state;
     [NonSerialized]
     public Minigame minigame;
@@ -133,10 +138,45 @@ public class GameMaster : MonoBehaviour
             Debug.Break();
         }
 
-        playerData[currentPlayer].TakeDamage(10);
-
         // Next turn
         currentPlayer = (currentPlayer + 1) % guard.players.Count;
+    }
+
+    public void ChooseNewCrownSpot()
+    {
+        bool choosing = true;
+        while(choosing)
+        {
+            int index = UnityEngine.Random.Range(0, guard.boardSpots.Count);
+
+            if(guard.boardSpots[index] != guard.startingSpot && guard.boardSpots[index] != guard.graveyardSpot && guard.boardSpots[index] != crownSpot)
+            {
+                bool playerOnSpot = false;
+                for(int i = 0; i < playerData.Count; ++i)
+                {
+                    if(playerData[i].spot == index)
+                    {
+                        playerOnSpot = true;
+                        break;
+                    }
+                }
+
+                if(playerOnSpot)
+                {
+                    continue;
+                }
+
+                choosing = false;
+                crownSpot = guard.boardSpots[index];
+                crownSpotPos = crownSpot.transform.position;
+                SetCrownSpot();
+            }
+        }
+    }
+
+    void SetCrownSpot()
+    {
+        crownSpot.ChangeType(Spot.Type.CROWN);
     }
 
     // Minigame -> Game scene
@@ -144,7 +184,30 @@ public class GameMaster : MonoBehaviour
     {
         guard = GameGuard.INSTANCE;
 
-        if(moveDirectionReversed)
+        if (guard)
+        {
+            if (crownSpotPos.x != -9999f)
+            {
+                for (int i = 0; i < guard.boardSpots.Count; ++i)
+                {
+                    // The actual Spot instance may change between the scenes,
+                    // so store the transform and get the spot every time.
+                    if (crownSpotPos == guard.boardSpots[i].transform.position)
+                    {
+                        crownSpot = guard.boardSpots[i];
+                        break;
+                    }
+                }
+
+                SetCrownSpot();
+            }
+            else
+            {
+                ChooseNewCrownSpot();
+            }
+        }
+
+        if (moveDirectionReversed)
         {
             ReverseMoveDirection(); // The board isn't reversed, while moveDirectionReserved is true, so fix that
             moveDirectionReversed = true;
