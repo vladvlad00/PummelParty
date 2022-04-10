@@ -16,6 +16,18 @@ public class GameMaster : MonoBehaviour
         SPOT_MINIGAME_FINISHED
     }
 
+    //public static readonly Color[] playerColors =
+    //{
+    //    Color.red,
+    //    Color.green,
+    //    Color.blue,
+    //    Color.yellow,
+    //    Color.cyan,
+    //    Color.gray,
+    //    Color.magenta,
+    //    Color.black
+    //};
+
     public enum Minigame
     {
         // Inconsistent with UPPER_SNAKE_CASE, but needed since ToString() has to yield a valid Scene name
@@ -150,7 +162,7 @@ public class GameMaster : MonoBehaviour
         {
             int index = UnityEngine.Random.Range(0, guard.boardSpots.Count);
 
-            if(guard.boardSpots[index] != guard.startingSpot && guard.boardSpots[index] != guard.graveyardSpot && guard.boardSpots[index] != crownSpot)
+            if(guard.boardSpots[index] != guard.startingSpot && !guard.IsGraveyard(guard.boardSpots[index]) && guard.boardSpots[index] != crownSpot)
             {
                 bool playerOnSpot = false;
                 for(int i = 0; i < playerData.Count; ++i)

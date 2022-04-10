@@ -19,17 +19,6 @@ public class ColorRunMaster : MinigameMaster
         new Vector2Int(ARENA_SIZE / 2, 0),
         new Vector2Int(ARENA_SIZE / 2, ARENA_SIZE - 1)
     };
-    private readonly Color[] playerColors =
-    {
-        Color.red,
-        Color.green,
-        Color.blue,
-        Color.yellow,
-        Color.cyan,
-        Color.gray,
-        Color.magenta,
-        Color.black
-    };
 
     private float minX;
     private float minY;
@@ -79,7 +68,7 @@ public class ColorRunMaster : MinigameMaster
         {
             for (int j = 0; j < ARENA_SIZE; j++)
             {
-                arena[i, j] = 0;
+                arena[i, j] = -1;
                 Vector3 pos = getPosFromLineCol(i, j);
                 arenaSquares[i, j] = Instantiate(squarePrefab, pos, Quaternion.identity);
                 arenaSquares[i, j].GetComponent<RectTransform>().SetParent(canvasTransform, false);
@@ -91,9 +80,9 @@ public class ColorRunMaster : MinigameMaster
         {
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
-            arenaSquares[startPositions[i].x, startPositions[i].y].GetComponent<Image>().color = playerColors[i];
+            arenaSquares[startPositions[i].x, startPositions[i].y].GetComponent<Image>().color = data.color;
             freeSquares--;
-            arena[startPositions[i].x, startPositions[i].y] = i + 1;
+            arena[startPositions[i].x, startPositions[i].y] = data.id;
             Vector3 playerPos = getPosFromLineCol(startPositions[i].x, startPositions[i].y);
 
             GameObject obj = Instantiate(playerPrefab, playerPos, Quaternion.identity);
@@ -138,16 +127,16 @@ public class ColorRunMaster : MinigameMaster
         if (newX >= ARENA_SIZE || newX < 0 || newY >= ARENA_SIZE || newY < 0)
             return;
         int col = arena[newX, newY];
-        if (col != 0 && col != player.data.id)
+        if (col != -1 && col != player.data.id)
             return;
         player.pos.x = newX;
         player.pos.y = newY;
 
-        if (col == 0)
+        if (col == -1)
             freeSquares--;
         player.GetComponent<RectTransform>().localPosition = getPosFromLineCol(newX, newY);
         arena[newX, newY] = player.data.id;
-        arenaSquares[newX, newY].GetComponent<Image>().color = playerColors[player.data.id - 1];
+        arenaSquares[newX, newY].GetComponent<Image>().color = player.data.color;
         Debug.Log(freeSquares + " squares left");
 
         if (freeSquares == 0)

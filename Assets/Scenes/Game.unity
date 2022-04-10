@@ -237,8 +237,10 @@ MonoBehaviour:
   playerData:
   - id: 0
     name: Player 1
+    color: {r: 0.5568628, g: 0.105882354, b: 0.50612247, a: 1}
   - id: 1
     name: Player 2
+    color: {r: 0.31611168, g: 0.6981132, b: 0.19428623, a: 1}
 --- !u!4 &320208061
 Transform:
   m_ObjectHideFlags: 0

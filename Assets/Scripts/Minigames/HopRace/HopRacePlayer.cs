@@ -26,13 +26,13 @@ public class HopRacePlayer : MonoBehaviour
         // In the future, the key will be the same for all players
         // The input sensor receives the Space for both players,
         // so only this method will need to be modified when multiplayer is implemented
-        if(data.id == 1 && InputMaster.GetKeyDown(KeyCode.Space))
+        if (data.id == 0 && InputMaster.GetKeyDown(KeyCode.Space))
+        {
+            InputSensor.TriggerKey(KeyCode.Space, 0);
+        }
+        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.Return))
         {
             InputSensor.TriggerKey(KeyCode.Space, 1);
-        }
-        else if(data.id == 2 && InputMaster.GetKeyDown(KeyCode.Return))
-        {
-            InputSensor.TriggerKey(KeyCode.Space, 2);
         }
     }
 }

@@ -18,10 +18,18 @@ public class GameGuard : MonoBehaviour
     public List<Spot> boardSpots;
 
     public Spot startingSpot;
-    public Spot graveyardSpot;
+    public List<Spot> graveyardSpots;
 
     public Material normalSpotMaterial;
     public Material crownSpotMaterial;
+    public Material reverseSpotMaterial;
+    public Material hpplusSpotMaterial;
+    public Material hpminusSpotMaterial;
+    public Material coinsSpotMaterial;
+    public Material teleportSpotMaterial;
+    public Material respawnSpotMaterial;
+    public Material itemSpotMaterial;
+    public Material startSpotMaterial;
 
     void Awake()
     {
@@ -95,5 +103,25 @@ public class GameGuard : MonoBehaviour
             players[i].data = GameMaster.INSTANCE.playerData[i];
             players[i].Reposition();
         }
+    }
+
+    public bool IsGraveyard(Spot spot)
+    {
+        return graveyardSpots.Contains(spot);
+    }
+
+    public Spot GetRandomGraveyard()
+    {
+        return graveyardSpots[UnityEngine.Random.Range(0, graveyardSpots.Count)];
+    }
+
+    public Spot GetRandomSpot(bool includeCrown = false)
+    {
+        Spot spot = boardSpots[UnityEngine.Random.Range(0, boardSpots.Count)];
+        while (IsGraveyard(spot) || (spot == GameMaster.INSTANCE.crownSpot && includeCrown))
+        {
+            spot = boardSpots[UnityEngine.Random.Range(0, boardSpots.Count)];
+        }
+        return spot;
     }
 }

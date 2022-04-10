@@ -27,6 +27,8 @@ public class BaseballMaster : MinigameMaster
     public float ballStopY = 3f;
     [NonSerialized]
     public float maxSpeed = -200f;
+    [NonSerialized]
+    public float maxBallTime = 1.1f;
 
     public TextMeshProUGUI timeText;
     public DateTime startTime;
@@ -110,7 +112,7 @@ public class BaseballMaster : MinigameMaster
         {
             if (timeleft > 25) 
             {
-                timeString = (maxTime - timeleft).ToString().Substring(0, 5);
+                timeString = ((maxTime - timeleft).ToString() + "00000").Substring(0, 5);
             }
             else
             {
@@ -124,8 +126,9 @@ public class BaseballMaster : MinigameMaster
         }
         foreach(BaseballPlayer player in players)
         {
-            if ((player.resetBallBool && (DateTime.Now - player.resetBall).TotalSeconds >= 3) || (!player.resetBallBool && player.ball.transform.position.y <= ballStopY))
+            if ((player.resetBallBool && (DateTime.Now - player.resetBall).TotalSeconds >= maxBallTime) || (!player.resetBallBool && player.ball.transform.position.y <= ballStopY))
             {
+                player.ball.GetComponent<BaseballBall>().stopSmall();
                 player.resetBallBool = false;
                 Debug.Log(player.ball.GetComponent<Rigidbody>().velocity);
                 player.ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -163,15 +166,16 @@ public class BaseballMaster : MinigameMaster
                 {
                     return;
                 }
-                if (Math.Abs(player.ball.transform.position.y - 46) < 7)
+                if (Math.Abs(player.ball.transform.position.y - 52) < 7)
                 {
-                    int modif = (int)Math.Pow(10 - Math.Abs(player.ball.transform.position.y - 46) / 7 * 10, 2);
+                    int modif = (int)Math.Pow(10 - Math.Abs(player.ball.transform.position.y - 52) / 7 * 10, 2);
                     player.score += modif;
                     player.scoreBoard.GetComponent<TextMeshProUGUI>().SetText("Score: " + player.score.ToString());
                     player.hitText.GetComponent<TextMeshProUGUI>().SetText("+" + modif.ToString());
                     player.resetBallBool = true;
                     player.resetBall = DateTime.Now;
-                    player.ball.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.Range(-1000f, 1000f), 1000, 20000);
+                    player.ball.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.Range(-1000f, 1000f), UnityEngine.Random.Range(1000f, 2000f), 20000);
+                    player.ball.GetComponent<BaseballBall>().startSmall(UnityEngine.Random.Range(0.015f, 0.025f));
                 }
                 else
                 {
