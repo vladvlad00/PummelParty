@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class MeteorRainMaster : MinigameMaster
@@ -59,6 +60,7 @@ public class MeteorRainMaster : MinigameMaster
             Vector3 playerPos = new Vector3((wallPos.x + nextWallPos.x) / 2, PLAYER_Y, 0f);
 
             obj = Instantiate(playerPrefab, playerPos, Quaternion.identity);
+            obj.GetComponent<Image>().color = data.color;
             transform = obj.GetComponent<RectTransform>();
             transform.SetParent(canvasTransform, false);
 

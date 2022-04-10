@@ -26,37 +26,37 @@ public class ColorRunPlayer : MonoBehaviour
         // In the future, the key will be the same for all players
         // The input sensor receives the Space for both players,
         // so only this method will need to be modified when multiplayer is implemented
-        if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.W))
+        if (data.id == 0 && InputMaster.GetKeyDown(KeyCode.W))
+        {
+            InputSensor.TriggerKey(KeyCode.W, 0);
+        }
+        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.UpArrow))
         {
             InputSensor.TriggerKey(KeyCode.W, 1);
         }
-        else if (data.id == 2 && InputMaster.GetKeyDown(KeyCode.UpArrow))
+        else if (data.id == 0 && InputMaster.GetKeyDown(KeyCode.S))
         {
-            InputSensor.TriggerKey(KeyCode.W, 2);
+            InputSensor.TriggerKey(KeyCode.S, 0);
         }
-        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.S))
+        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.DownArrow))
         {
             InputSensor.TriggerKey(KeyCode.S, 1);
         }
-        else if (data.id == 2 && InputMaster.GetKeyDown(KeyCode.DownArrow))
+        else if (data.id == 0 && InputMaster.GetKeyDown(KeyCode.A))
         {
-            InputSensor.TriggerKey(KeyCode.S, 2);
+            InputSensor.TriggerKey(KeyCode.A, 0);
         }
-        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.A))
+        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.LeftArrow))
         {
             InputSensor.TriggerKey(KeyCode.A, 1);
         }
-        else if (data.id == 2 && InputMaster.GetKeyDown(KeyCode.LeftArrow))
+        else if (data.id == 0 && InputMaster.GetKeyDown(KeyCode.D))
         {
-            InputSensor.TriggerKey(KeyCode.A, 2);
+            InputSensor.TriggerKey(KeyCode.D, 0);
         }
-        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.D))
+        else if (data.id == 1 && InputMaster.GetKeyDown(KeyCode.RightArrow))
         {
             InputSensor.TriggerKey(KeyCode.D, 1);
-        }
-        else if (data.id == 2 && InputMaster.GetKeyDown(KeyCode.RightArrow))
-        {
-            InputSensor.TriggerKey(KeyCode.D, 2);
         }
     }
 }

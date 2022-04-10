@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class HopRaceMaster : MinigameMaster
@@ -29,6 +30,7 @@ public class HopRaceMaster : MinigameMaster
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
             GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.identity);
+            obj.GetComponent<Image>().color = data.color;
 
             RectTransform transform = obj.GetComponent<RectTransform>();
             transform.SetParent(canvasTransform, false);

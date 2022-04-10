@@ -19,6 +19,8 @@ public class PlayerData
     [NonSerialized]
     public int hp = MAX_HP;
 
+    public Color color;
+
     [NonSerialized]
     public List<ItemStack> stacks = new List<ItemStack>();
 

@@ -16,6 +16,18 @@ public class GameMaster : MonoBehaviour
         SPOT_MINIGAME_FINISHED
     }
 
+    //public static readonly Color[] playerColors =
+    //{
+    //    Color.red,
+    //    Color.green,
+    //    Color.blue,
+    //    Color.yellow,
+    //    Color.cyan,
+    //    Color.gray,
+    //    Color.magenta,
+    //    Color.black
+    //};
+
     public enum Minigame
     {
         // Inconsistent with UPPER_SNAKE_CASE, but needed since ToString() has to yield a valid Scene name
