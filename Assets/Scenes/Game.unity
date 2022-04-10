@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -237,10 +237,10 @@ MonoBehaviour:
   playerData:
   - id: 0
     name: Player 1
-    color: {r: 0.5568628, g: 0.105882354, b: 0.50612247, a: 1}
+    color: {r: 0, g: 0, b: 0, a: 0}
   - id: 1
     name: Player 2
-    color: {r: 0.31611168, g: 0.6981132, b: 0.19428623, a: 1}
+    color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &320208061
 Transform:
   m_ObjectHideFlags: 0
@@ -454,10 +454,19 @@ MonoBehaviour:
   players:
   - {fileID: 1161643780}
   - {fileID: 1110351946}
+  pathPrefab: {fileID: 7957557465982987657, guid: 4ea4db86138a4c54d89b5d3b1d33cf62, type: 3}
   startingSpot: {fileID: 2005418974}
-  graveyardSpot: {fileID: 1759283739}
+  graveyardSpots: []
   normalSpotMaterial: {fileID: 2100000, guid: daad781b222fa524ea9143e13b3f1b8b, type: 2}
   crownSpotMaterial: {fileID: 2100000, guid: 95be11f357198e448ae5c39b7c13a355, type: 2}
+  reverseSpotMaterial: {fileID: 0}
+  hpplusSpotMaterial: {fileID: 0}
+  hpminusSpotMaterial: {fileID: 0}
+  coinsSpotMaterial: {fileID: 0}
+  teleportSpotMaterial: {fileID: 0}
+  respawnSpotMaterial: {fileID: 0}
+  itemSpotMaterial: {fileID: 0}
+  startSpotMaterial: {fileID: 0}
 --- !u!4 &425284063
 Transform:
   m_ObjectHideFlags: 0
