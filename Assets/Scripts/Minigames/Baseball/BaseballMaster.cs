@@ -27,6 +27,8 @@ public class BaseballMaster : MinigameMaster
     public float ballStopY = 3f;
     [NonSerialized]
     public float maxSpeed = -200f;
+    [NonSerialized]
+    public float maxBallTime = 1.1f;
 
     public TextMeshProUGUI timeText;
     public DateTime startTime;
@@ -48,7 +50,7 @@ public class BaseballMaster : MinigameMaster
 
         Vector3 basePos = new Vector3(baseX, -300f, 0f);
 
-        for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count; ++i)
+        for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count * 2; ++i)
         {
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
@@ -124,8 +126,9 @@ public class BaseballMaster : MinigameMaster
         }
         foreach(BaseballPlayer player in players)
         {
-            if ((player.resetBallBool && (DateTime.Now - player.resetBall).TotalSeconds >= 3) || (!player.resetBallBool && player.ball.transform.position.y <= ballStopY))
+            if ((player.resetBallBool && (DateTime.Now - player.resetBall).TotalSeconds >= maxBallTime) || (!player.resetBallBool && player.ball.transform.position.y <= ballStopY))
             {
+                player.ball.GetComponent<BaseballBall>().stopSmall();
                 player.resetBallBool = false;
                 Debug.Log(player.ball.GetComponent<Rigidbody>().velocity);
                 player.ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -172,6 +175,7 @@ public class BaseballMaster : MinigameMaster
                     player.resetBallBool = true;
                     player.resetBall = DateTime.Now;
                     player.ball.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.Range(-1000f, 1000f), 1000, 20000);
+                    player.ball.GetComponent<BaseballBall>().startSmall(0.02f);
                 }
                 else
                 {
