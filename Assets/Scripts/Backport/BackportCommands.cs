@@ -10,6 +10,8 @@ public static class BackportCommands
     {
         Backport.INSTANCE.vm.LoadGlobalNative("rig_dice", RigDice);
         Backport.INSTANCE.vm.LoadGlobalNative("rig_minigame", RigMinigame);
+        Backport.INSTANCE.vm.LoadGlobalNative("rd", RigDice);
+        Backport.INSTANCE.vm.LoadGlobalNative("rm", RigMinigame);
         Backport.INSTANCE.vm.LoadGlobalNative("reverse", Reverse);
     }
 

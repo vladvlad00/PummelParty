@@ -22,7 +22,8 @@ public class GameMaster : MonoBehaviour
         // (HopRace, because HOP_RACE is a weird scene name)
         HopRace,
         MeteorRain,
-        Baseball
+        Baseball,
+        ColorRun
     }
 
     public static bool INPUT_ENABLED = true;

@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigames/Baseball.unity
     guid: 1fe8ac47e88e1ca43af074b48a0b2f99
+  - enabled: 1
+    path: Assets/Scenes/Minigames/ColorRun.unity
+    guid: 67bc70259d385f74381932a1ad0508fa
   m_configObjects: {}
