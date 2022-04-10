@@ -18,6 +18,10 @@ public class GameGuard : MonoBehaviour
     public List<Spot> boardSpots;
 
     public Spot startingSpot;
+    public Spot graveyardSpot;
+
+    public Material normalSpotMaterial;
+    public Material crownSpotMaterial;
 
     void Awake()
     {

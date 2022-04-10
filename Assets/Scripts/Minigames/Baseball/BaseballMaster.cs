@@ -50,7 +50,7 @@ public class BaseballMaster : MinigameMaster
 
         Vector3 basePos = new Vector3(baseX, -300f, 0f);
 
-        for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count * 2; ++i)
+        for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count; ++i)
         {
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
@@ -112,7 +112,7 @@ public class BaseballMaster : MinigameMaster
         {
             if (timeleft > 25) 
             {
-                timeString = (maxTime - timeleft).ToString().Substring(0, 5);
+                timeString = ((maxTime - timeleft).ToString() + "00000").Substring(0, 5);
             }
             else
             {
@@ -166,16 +166,16 @@ public class BaseballMaster : MinigameMaster
                 {
                     return;
                 }
-                if (Math.Abs(player.ball.transform.position.y - 46) < 7)
+                if (Math.Abs(player.ball.transform.position.y - 52) < 7)
                 {
-                    int modif = (int)Math.Pow(10 - Math.Abs(player.ball.transform.position.y - 46) / 7 * 10, 2);
+                    int modif = (int)Math.Pow(10 - Math.Abs(player.ball.transform.position.y - 52) / 7 * 10, 2);
                     player.score += modif;
                     player.scoreBoard.GetComponent<TextMeshProUGUI>().SetText("Score: " + player.score.ToString());
                     player.hitText.GetComponent<TextMeshProUGUI>().SetText("+" + modif.ToString());
                     player.resetBallBool = true;
                     player.resetBall = DateTime.Now;
-                    player.ball.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.Range(-1000f, 1000f), 1000, 20000);
-                    player.ball.GetComponent<BaseballBall>().startSmall(0.02f);
+                    player.ball.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.Range(-1000f, 1000f), UnityEngine.Random.Range(1000f, 2000f), 20000);
+                    player.ball.GetComponent<BaseballBall>().startSmall(UnityEngine.Random.Range(0.015f, 0.025f));
                 }
                 else
                 {
