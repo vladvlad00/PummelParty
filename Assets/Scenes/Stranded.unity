@@ -1100,10 +1100,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData:
-  - id: 1
+  - id: 0
     name: Player 1
-  - id: 2
+    color: {r: 1, g: 0, b: 0.8339343, a: 1}
+  - id: 1
     name: Player 2
+    color: {r: 0.91039276, g: 1, b: 0, a: 1}
 --- !u!4 &320208061
 Transform:
   m_ObjectHideFlags: 0
