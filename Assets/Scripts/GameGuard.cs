@@ -84,9 +84,9 @@ public class GameGuard : MonoBehaviour
                 );
                 float spriteHeight = obj.GetComponent<SpriteRenderer>().bounds.size.y * obj.GetComponent<Transform>().localScale.y;
                 obj.GetComponent<Transform>().localScale = new Vector3(
-                    obj.GetComponent<Transform>().localScale.x,
-                    distance(boardSpots[i].transform.position, boardSpots[i].next[j].transform.position) / (spriteHeight) / 100,
-                    obj.GetComponent<Transform>().localScale.z
+                    obj.GetComponent<Transform>().localScale.x / 2,
+                    distance(boardSpots[i].transform.position, boardSpots[i].next[j].transform.position) / (spriteHeight) / 100 / 2,
+                    obj.GetComponent<Transform>().localScale.z / 2
                 );
             }
         }
