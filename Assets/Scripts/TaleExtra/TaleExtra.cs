@@ -12,7 +12,7 @@ public static class TaleExtra
         TaleUtil.Queue.Enqueue(new TaleUtil.TransitionAction("Rip", TaleUtil.TransitionAction.Type.OUT, duration));
 
     public static TaleUtil.Action ReturnToGame() =>
-        TaleUtil.Queue.Enqueue(new TaleUtil.SceneAction("Scenes/Game"));
+        TaleUtil.Queue.Enqueue(new TaleUtil.SceneAction("Scenes/Stranded"));
 
     public static void MinigameScoreboard()
     {

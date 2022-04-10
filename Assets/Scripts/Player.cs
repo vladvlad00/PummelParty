@@ -100,9 +100,38 @@ public class Player : MonoBehaviour {
             --moveCount;
             clock = 0f;
 
+            if(intermediarySpot.type == Spot.Type.CROWN)
+            {
+                intermediarySpot.ChangeType(Spot.Type.NORMAL);
+
+                moveCount = 0;
+                ++data.crowns;
+                GameMaster.INSTANCE.ChooseNewCrownSpot();
+            }
             if(moveCount == 0)
             {
                 // Reached the target spot, stop moving
+                switch (intermediarySpot.type)
+                {
+                    case Spot.Type.TELEPORT:
+                        data.TeleportToSpot(GameMaster.INSTANCE.guard.GetRandomSpot());
+                        break;
+                    case Spot.Type.REV:
+                        GameMaster.INSTANCE.ReverseMoveDirection();
+                        break;
+                    case Spot.Type.HP_PLUS:
+                        data.ModifyHP(10);
+                        break;
+                    case Spot.Type.HP_MINUS:
+                        data.ModifyHP(-10);
+                        break;
+                    case Spot.Type.ITEM:
+                        // Add item :)
+                        break;
+                    case Spot.Type.COINS:
+                        data.ModifyCoins(UnityEngine.Random.Range(10, 30));
+                        break;
+                }
                 state = State.IDLE;
             }
             else
