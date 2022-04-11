@@ -25,12 +25,19 @@ public class Spot : MonoBehaviour
     [NonSerialized]
     public int index;
     public List<Spot> next;
+    public Type originalType = Type.NORMAL;
     public Type type = Type.NORMAL;
 
     private void Awake()
     {
         transform = GetComponent<Transform>();
         renderer = GetComponent<MeshRenderer>();
+    }
+
+    public void Init()
+    {
+        originalType = type;
+        ChangeType(type);
     }
 
     public void ChangeType(Type type)
@@ -40,34 +47,34 @@ public class Spot : MonoBehaviour
         switch(type)
         {
             case Type.NORMAL:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.normalSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.normalSpotMaterial;
                 break;
             case Type.CROWN:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.crownSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.crownSpotMaterial;
                 break;
             case Type.REV:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.reverseSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.reverseSpotMaterial;
                 break;
             case Type.TELEPORT:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.teleportSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.teleportSpotMaterial;
                 break;
             case Type.HP_PLUS:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.hpplusSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.hpplusSpotMaterial;
                 break;
             case Type.HP_MINUS:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.hpminusSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.hpminusSpotMaterial;
                 break;
             case Type.COINS:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.coinsSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.coinsSpotMaterial;
                 break;
             case Type.RESPAWN:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.respawnSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.respawnSpotMaterial;
                 break;
             case Type.START:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.startSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.startSpotMaterial;
                 break;
             case Type.ITEM:
-                renderer.sharedMaterial = GameMaster.INSTANCE.guard.itemSpotMaterial;
+                renderer.sharedMaterial = GameGuard.INSTANCE.itemSpotMaterial;
                 break;
             default:
                 Debug.LogError("Unknown material!");

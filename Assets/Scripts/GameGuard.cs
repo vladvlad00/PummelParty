@@ -94,6 +94,9 @@ public class GameGuard : MonoBehaviour
                 );
                 arrows.Add(obj);
             }
+
+            // Force update the material
+            boardSpots[i].Init();
         }
 
 

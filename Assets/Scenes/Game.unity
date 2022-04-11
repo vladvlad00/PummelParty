@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -237,10 +237,10 @@ MonoBehaviour:
   playerData:
   - id: 0
     name: Player 1
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.74773073, g: 0.053800307, b: 0.8773585, a: 1}
   - id: 1
     name: Player 2
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.44115406, g: 0.9056604, b: 0.20932718, a: 1}
 --- !u!4 &320208061
 Transform:
   m_ObjectHideFlags: 0
@@ -456,17 +456,18 @@ MonoBehaviour:
   - {fileID: 1110351946}
   pathPrefab: {fileID: 7957557465982987657, guid: 4ea4db86138a4c54d89b5d3b1d33cf62, type: 3}
   startingSpot: {fileID: 2005418974}
-  graveyardSpots: []
-  normalSpotMaterial: {fileID: 2100000, guid: daad781b222fa524ea9143e13b3f1b8b, type: 2}
+  graveyardSpots:
+  - {fileID: 1759283739}
+  normalSpotMaterial: {fileID: 2100000, guid: 121f63d3aeeda0945aac7af042eb8840, type: 2}
   crownSpotMaterial: {fileID: 2100000, guid: 95be11f357198e448ae5c39b7c13a355, type: 2}
-  reverseSpotMaterial: {fileID: 0}
-  hpplusSpotMaterial: {fileID: 0}
-  hpminusSpotMaterial: {fileID: 0}
-  coinsSpotMaterial: {fileID: 0}
-  teleportSpotMaterial: {fileID: 0}
-  respawnSpotMaterial: {fileID: 0}
-  itemSpotMaterial: {fileID: 0}
-  startSpotMaterial: {fileID: 0}
+  reverseSpotMaterial: {fileID: 2100000, guid: 875debd4e218da047b7caac5ee4ee294, type: 2}
+  hpplusSpotMaterial: {fileID: 2100000, guid: fe2278e41c009de4682481490f9a19fe, type: 2}
+  hpminusSpotMaterial: {fileID: 2100000, guid: daad781b222fa524ea9143e13b3f1b8b, type: 2}
+  coinsSpotMaterial: {fileID: 2100000, guid: a4a2392bb6c9a3149b077433504d193d, type: 2}
+  teleportSpotMaterial: {fileID: 2100000, guid: 7bb3065327678ea45b1bc9b96e953e61, type: 2}
+  respawnSpotMaterial: {fileID: 2100000, guid: e41f25ae74648b846a7f4340cace2b9c, type: 2}
+  itemSpotMaterial: {fileID: 2100000, guid: 8a5fe3e34b550dd4bb779ec54bdd0468, type: 2}
+  startSpotMaterial: {fileID: 2100000, guid: 2bfbb62793547ac4ea44cccff2b62aa6, type: 2}
 --- !u!4 &425284063
 Transform:
   m_ObjectHideFlags: 0
@@ -1642,6 +1643,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1642464004}
     m_Modifications:
+    - target: {fileID: 1604036230344006394, guid: fd20bc8caf6742e4ca359ebade0844a3, type: 3}
+      propertyPath: type
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1604036230344006394, guid: fd20bc8caf6742e4ca359ebade0844a3, type: 3}
       propertyPath: next.Array.data[0]
       value: 

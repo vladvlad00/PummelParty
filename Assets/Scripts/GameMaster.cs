@@ -155,6 +155,11 @@ public class GameMaster : MonoBehaviour
         currentPlayer = (currentPlayer + 1) % guard.players.Count;
     }
 
+    public void RemoveCrownSpot()
+    {
+        crownSpot.ChangeType(crownSpot.originalType);
+    }
+
     public void ChooseNewCrownSpot()
     {
         bool choosing = true;
