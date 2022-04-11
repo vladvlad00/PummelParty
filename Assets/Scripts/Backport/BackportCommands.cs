@@ -13,6 +13,7 @@ public static class BackportCommands
         Backport.INSTANCE.vm.LoadGlobalNative("rd", RigDice);
         Backport.INSTANCE.vm.LoadGlobalNative("rm", RigMinigame);
         Backport.INSTANCE.vm.LoadGlobalNative("reverse", Reverse);
+        Backport.INSTANCE.vm.LoadGlobalNative("change_crown_spot", ChangeCrownSpot);
     }
 
     static Risa.Value RigDice(Risa.VM vm, Risa.Args args)
@@ -69,5 +70,18 @@ public static class BackportCommands
 
         GameMaster.INSTANCE.ReverseMoveDirection();
         return vm.CreateBool(GameMaster.INSTANCE.moveDirectionReversed);
+    }
+
+    static Risa.Value ChangeCrownSpot(Risa.VM vm, Risa.Args args)
+    {
+        if (args.Count() > 0)
+        {
+            Backport.WriteError("Invalid arguments for change_crown_spot (expected none)");
+            return Risa.Value.NULL;
+        }
+
+        GameMaster.INSTANCE.RemoveCrownSpot();
+        GameMaster.INSTANCE.ChooseNewCrownSpot();
+        return Risa.Value.NULL;
     }
 }

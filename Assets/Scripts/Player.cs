@@ -102,7 +102,7 @@ public class Player : MonoBehaviour {
 
             if(intermediarySpot.type == Spot.Type.CROWN)
             {
-                intermediarySpot.ChangeType(Spot.Type.NORMAL);
+                GameMaster.INSTANCE.RemoveCrownSpot();
 
                 moveCount = 0;
                 ++data.crowns;
