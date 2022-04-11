@@ -370,5 +370,6 @@ public class GameMaster : MonoBehaviour
         }
 
         moveDirectionReversed = !moveDirectionReversed;
+        guard.RotateArrows(moveDirectionReversed);
     }
 }

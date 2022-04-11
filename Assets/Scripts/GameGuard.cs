@@ -19,6 +19,8 @@ public class GameGuard : MonoBehaviour
 
     public Spot startingSpot;
     public List<Spot> graveyardSpots;
+    [NonSerialized]
+    public List<GameObject> arrows;
 
     public Material normalSpotMaterial;
     public Material crownSpotMaterial;
@@ -68,6 +70,8 @@ public class GameGuard : MonoBehaviour
             return angle;
         };
 
+        arrows = new List<GameObject>();
+
         for (int i = 0; i < boardSpots.Count; ++i)
         {
             //aici pun sagetile     
@@ -88,6 +92,7 @@ public class GameGuard : MonoBehaviour
                     distance(boardSpots[i].transform.position, boardSpots[i].next[j].transform.position) / (spriteHeight) / 100 / 2,
                     obj.GetComponent<Transform>().localScale.z / 2
                 );
+                arrows.Add(obj);
             }
         }
 
@@ -123,5 +128,22 @@ public class GameGuard : MonoBehaviour
             spot = boardSpots[UnityEngine.Random.Range(0, boardSpots.Count)];
         }
         return spot;
+    }
+
+    public void RotateArrows(bool reversed)
+    {
+        for (int i = 0; i < arrows.Count; i++)
+        {
+            double newY = arrows[i].transform.eulerAngles.y;
+            if (reversed)
+            {
+                newY += 180;
+            }
+            else
+            {
+                newY -= 180;
+            }
+            arrows[i].transform.localEulerAngles = new Vector3(arrows[i].transform.eulerAngles.x, (float)newY, arrows[i].transform.eulerAngles.z);
+        }
     }
 }
