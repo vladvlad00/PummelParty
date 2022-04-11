@@ -16,17 +16,17 @@ public class GameMaster : MonoBehaviour
         SPOT_MINIGAME_FINISHED
     }
 
-    //public static readonly Color[] playerColors =
-    //{
-    //    Color.red,
-    //    Color.green,
-    //    Color.blue,
-    //    Color.yellow,
-    //    Color.cyan,
-    //    Color.gray,
-    //    Color.magenta,
-    //    Color.black
-    //};
+    public static readonly Color[] playerColors =
+    {
+        Color.red,
+        Color.green,
+        Color.blue,
+        Color.yellow,
+        Color.cyan,
+        Color.gray,
+        Color.magenta,
+        Color.black
+    };
 
     public enum Minigame
     {

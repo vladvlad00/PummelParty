@@ -26,4 +26,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigames/ColorRun.unity
     guid: 67bc70259d385f74381932a1ad0508fa
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: bfeadf9058b1a1f478269c9cf018c181
+  - enabled: 1
+    path: Assets/Scenes/Stranded.unity
+    guid: a240f07ae77407f41b1874f7289969e0
   m_configObjects: {}

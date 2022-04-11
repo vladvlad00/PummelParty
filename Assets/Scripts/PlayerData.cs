@@ -5,6 +5,8 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerData
 {
+    private static int playersNum = 0;
+
     public const int MAX_HP = 20;
 
     public int id;
@@ -27,6 +29,12 @@ public class PlayerData
     [NonSerialized]
     public List<ItemStack> stacks = new List<ItemStack>();
 
+    public PlayerData(string name, Color color)
+    {
+        this.name = name;
+        this.color = color;
+        this.id = playersNum++;
+    }
     public Spot GetSpot()
     {
         Debug.Assert(spot != -1, "GetSpot was called, but the spot wasn't assigned to");
