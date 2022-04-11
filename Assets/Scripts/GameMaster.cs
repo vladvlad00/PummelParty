@@ -35,7 +35,8 @@ public class GameMaster : MonoBehaviour
         HopRace,
         MeteorRain,
         Baseball,
-        ColorRun
+        ColorRun,
+        DarkLabirinth
     }
 
     public static bool INPUT_ENABLED = true;

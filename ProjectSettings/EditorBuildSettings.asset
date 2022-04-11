@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Stranded.unity
     guid: a240f07ae77407f41b1874f7289969e0
+  - enabled: 1
+    path: Assets/Scenes/Minigames/DarkLabirinth.unity
+    guid: a28de3e3fcf52144ba30e1bd3a6edd27
   m_configObjects: {}
