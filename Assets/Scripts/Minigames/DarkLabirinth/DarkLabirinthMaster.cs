@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class DarkLabirinthMaster : MinigameMaster
 {
-    private const int ARENA_SIZE_X = 25;
+    private const int ARENA_SIZE_X = 17;
 
-    private const int ARENA_SIZE_Y = 45;
+    private const int ARENA_SIZE_Y = 30;
 
     private const int padding = 1;
 
-    private const int light_distance = 2;
+    private const int LIGHT_DISTANCE = 2;
 
-    private int players_that_finished = 0;
+    private int playersThatFinished = 0;
 
     private bool gameDone = false;
 
@@ -22,24 +22,24 @@ public class DarkLabirinthMaster : MinigameMaster
         startPositions =
         {
             new Vector2Int(0, 0),
-            new Vector2Int(4, 0),
+            new Vector2Int(2, 0),
+            new Vector2Int(6, 0),
             new Vector2Int(8, 0),
+            new Vector2Int(10, 0),
             new Vector2Int(12, 0),
-            new Vector2Int(16, 0),
-            new Vector2Int(20, 0),
-            new Vector2Int(24, 0),
-            new Vector2Int(28, 0)
+            new Vector2Int(14, 0),
+            new Vector2Int(16, 0)
         };
 
     private float elapsedTime = 0f;
 
-    private float time_before_swap = 5f;
+    private float timeBeforeSwap = 5f;
 
-    private float total_time_passed = 0f;
+    private float totalTimePassed = 0f;
 
-    private float round_max_time = 10f;
+    private float ROUND_MAX_TIME = 90f;
 
-    private bool make_black = true;
+    private bool makeBlack = true;
 
     private float minX;
 
@@ -63,7 +63,7 @@ public class DarkLabirinthMaster : MinigameMaster
 
     GameObject[,] arenaSquares;
 
-    private Vector3 getPosFromLineCol(int i, int j)
+    private Vector3 GetPosFromLineCol(int i, int j)
     {
         return new Vector3(minX + j * (squareSize + padding),
             minY + i * (squareSize + padding),
@@ -75,7 +75,7 @@ public class DarkLabirinthMaster : MinigameMaster
         InitInputMaster();
 
         Vector3[] corners = new Vector3[4];
-        canvasTransform.GetLocalCorners(corners);
+        canvasTransform.GetLocalCorners (corners);
         minX = corners[0].x;
         minY = corners[0].y;
         float maxX = corners[2].x;
@@ -98,7 +98,7 @@ public class DarkLabirinthMaster : MinigameMaster
             for (int j = 0; j < ARENA_SIZE_Y; j++)
             {
                 arena[i, j] = -1;
-                Vector3 pos = getPosFromLineCol(i, j);
+                Vector3 pos = GetPosFromLineCol(i, j);
                 arenaSquares[i, j] =
                     Instantiate(squarePrefab, pos, Quaternion.identity);
                 arenaSquares[i, j]
@@ -124,13 +124,14 @@ public class DarkLabirinthMaster : MinigameMaster
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
             Vector3 playerPos =
-                getPosFromLineCol(startPositions[i].x, startPositions[i].y);
+                GetPosFromLineCol(startPositions[i].x, startPositions[i].y);
 
             GameObject obj =
                 Instantiate(playerPrefab, playerPos, Quaternion.identity);
             obj.GetComponent<RectTransform>().SetParent(canvasTransform, false);
-            obj.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize, squareSize); //20 20
-
+            obj.GetComponent<RectTransform>().sizeDelta =
+                new Vector2(squareSize, squareSize); //20 20
+            obj.GetComponent<Image>().color = data.superColor.color;
             players.Add(obj.GetComponent<DarkLabirinthPlayer>());
             players[i].pos = startPositions[i];
             players[i].data = data;
@@ -184,17 +185,17 @@ public class DarkLabirinthMaster : MinigameMaster
             {
                 if (arena[i, j] == -1)
                 {
-                    if (UnityEngine.Random.Range(0, 5) % 5 == 0)
+                    if (UnityEngine.Random.Range(0, 4) % 4 == 0)
                     {
                         arena[i, j] = 0;
                         arenaSquares[i, j].GetComponent<Image>().color =
                             Color.gray;
                         if (
-                            UnityEngine.Random.Range(0, 5) % 5 == 0 &&
-                            i > light_distance &&
-                            i < ARENA_SIZE_X - light_distance &&
-                            j > light_distance &&
-                            j < ARENA_SIZE_Y - light_distance
+                            UnityEngine.Random.Range(0, 3) % 3 == 0 &&
+                            i > LIGHT_DISTANCE &&
+                            i < ARENA_SIZE_X - LIGHT_DISTANCE &&
+                            j > LIGHT_DISTANCE &&
+                            j < ARENA_SIZE_Y - LIGHT_DISTANCE && !LightNearby(i, j)
                         )
                         {
                             arena[i, j] = 1;
@@ -207,7 +208,7 @@ public class DarkLabirinthMaster : MinigameMaster
         }
     }
 
-    public override void OnPlayerKeyDown(int playerId, KeyCode key)
+    public override void OnPlayerKeyHold(int playerId, KeyCode key)
     {
         // Find the player who pressed the key
         DarkLabirinthPlayer player = players.Find((x) => x.data.id == playerId);
@@ -217,28 +218,30 @@ public class DarkLabirinthMaster : MinigameMaster
             return;
         }
 
-        int
-            dx = 0,
-            dy = 0;
+        float
+            dx = 0f,
+            dy = 0f;
 
         // Handle the key
         switch (key)
         {
             case KeyCode.W:
-                dx = 1;
+                dx = 0.025f;
                 break;
             case KeyCode.S:
-                dx = -1;
+                dx = -0.025f;
                 break;
             case KeyCode.A:
-                dy = -1;
+                dy = -0.025f;
                 break;
             case KeyCode.D:
-                dy = 1;
+                dy = 0.025f;
                 break;
         }
-        int newX = player.pos.x + dx;
-        int newY = player.pos.y + dy;
+        float auxX=player.pos.x + dx;
+        float auxY=player.pos.y + dy;
+        int newX = (int)(auxX);
+        int newY = (int)(auxY);
         if (newX >= ARENA_SIZE_X || newX < 0 || newY >= ARENA_SIZE_Y || newY < 0
         ) return;
         int col = arena[newX, newY];
@@ -247,130 +250,56 @@ public class DarkLabirinthMaster : MinigameMaster
             player.pos.x = startPositions[playerId].x;
             player.pos.y = startPositions[playerId].y;
             player.GetComponent<RectTransform>().localPosition =
-                getPosFromLineCol(startPositions[playerId].x, startPositions[playerId].y);
+                GetPosFromLineCol(startPositions[playerId].x,
+                startPositions[playerId].y);
             return;
         }
 
-        player.pos.x = newX;
-        player.pos.y = newY;
+        player.pos.x = auxX;
+        player.pos.y = auxY;
         player.GetComponent<RectTransform>().localPosition =
-            getPosFromLineCol(newX, newY);
+            GetPosFromLineCol(newX, newY);
 
         if (player.pos.y >= ARENA_SIZE_Y - 2 && player.finishedGame == false)
         {
-            players_that_finished += 1;
+            playersThatFinished += 1;
             player.finishedGame = true;
-            player.position = players_that_finished;
-        }
-    }
-
-    private void light_neighbours(int x, int y, int distance)
-    {
-        int startX = x - distance;
-        int startY = y - distance;
-
-        int stopX = x + distance;
-        int stopY = y + distance;
-        for (int i = startX; i <= stopX; i++)
-        {
-            for (int j = startY; j <= stopY; j++)
-            {
-                if (i >= 0 && i < ARENA_SIZE_X && j >= 0 && j < ARENA_SIZE_Y)
-                {
-                    if (arena[i, j] == 0)
-                    {
-                        arenaSquares[i, j].GetComponent<Image>().color =
-                            Color.gray;
-                    }
-                }
-            }
-        }
-    }
-
-    void makeAllBlack()
-    {
-        List<Vector2> lights = new List<Vector2>();
-        for (int i = 0; i < ARENA_SIZE_X; i++)
-        {
-            for (int j = 0; j < ARENA_SIZE_Y; j++)
-            {
-                if (arena[i, j] != 1)
-                {
-                    arenaSquares[i, j].GetComponent<Image>().color =
-                        Color.black;
-                }
-                else
-                {
-                    lights.Add(new Vector2(i, j));
-                }
-            }
-        }
-        for (int i = 0; i < lights.Count; ++i)
-        {
-            int x = (int)(lights[i].x);
-            int y = (int)(lights[i].y);
-            light_neighbours(x, y, 3);
-        }
-    }
-
-    void makeNormal()
-    {
-        for (int i = 0; i < ARENA_SIZE_X; i++)
-        {
-            for (int j = 0; j < ARENA_SIZE_Y; j++)
-            {
-                if (arena[i, j] == -1)
-                {
-                    arenaSquares[i, j].GetComponent<Image>().color =
-                        Color.black;
-                }
-                else if (arena[i, j] == 1)
-                {
-                    arenaSquares[i, j].GetComponent<Image>().color =
-                        Color.yellow;
-                }
-                else
-                {
-                    arenaSquares[i, j].GetComponent<Image>().color = Color.gray;
-                }
-            }
         }
     }
 
     void Update()
     {
-        if (gameDone)
-            return;
+        if (gameDone) return;
         elapsedTime += Time.deltaTime;
         Debug.Log("Elapsed time: " + elapsedTime);
-        if (elapsedTime > time_before_swap)
+        if (elapsedTime > timeBeforeSwap)
         {
-            total_time_passed += elapsedTime;
+            totalTimePassed += elapsedTime;
             elapsedTime = 0f;
-            if (make_black == true)
+            if (makeBlack == true)
             {
                 Debug.Log("Making black");
-                makeAllBlack();
-                make_black = false;
-                time_before_swap = UnityEngine.Random.Range(5f, 10f);
-                Debug.Log("Time to wait: " + time_before_swap);
+                MakeAllBlack();
+                makeBlack = false;
+                timeBeforeSwap = UnityEngine.Random.Range(5f, 10f);
+                Debug.Log("Time to wait: " + timeBeforeSwap);
             }
             else
             {
                 Debug.Log("Making normal");
-                makeNormal();
-                make_black = true;
-                time_before_swap = UnityEngine.Random.Range(2f, 5f);
-                Debug.Log("Time to wait: " + time_before_swap);
+                MakeNormal();
+                makeBlack = true;
+                timeBeforeSwap = UnityEngine.Random.Range(2f, 5f);
+                Debug.Log("Time to wait: " + timeBeforeSwap);
             }
         }
         if (
-            players_that_finished == players.Count ||
-            total_time_passed >= round_max_time
+            playersThatFinished == players.Count ||
+            totalTimePassed >= ROUND_MAX_TIME
         )
         {
             Dictionary<int, int> playerScores = new Dictionary<int, int>();
-            if (players_that_finished == players.Count)
+            if (playersThatFinished == players.Count)
             {
                 Debug.Log("All players finished");
                 foreach (DarkLabirinthPlayer p in players)
@@ -387,7 +316,7 @@ public class DarkLabirinthMaster : MinigameMaster
                     if (p.finishedGame == false)
                     {
                         playerScores
-                            .Add(p.data.id, 10 + ARENA_SIZE_Y - p.pos.y);
+                            .Add(p.data.id, 10 + ARENA_SIZE_Y - (int)(p.pos.y));
                     }
                     else
                     {
@@ -397,7 +326,7 @@ public class DarkLabirinthMaster : MinigameMaster
             }
             GameMaster.INSTANCE.minigameScoreboard = new List<PlayerData>();
             foreach (DarkLabirinthPlayer p in players)
-                GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
+            GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
 
             GameMaster
                 .INSTANCE
@@ -423,8 +352,100 @@ public class DarkLabirinthMaster : MinigameMaster
         return;
     }
 
-    public override void OnPlayerKeyHold(int playerId, KeyCode key)
+    public override void OnPlayerKeyDown(int playerId, KeyCode key)
     {
         return;
+    }
+
+    private void LightNeighbours(int x, int y)
+    {
+        int startX = x - LIGHT_DISTANCE;
+        int startY = y - LIGHT_DISTANCE;
+
+        int stopX = x + LIGHT_DISTANCE;
+        int stopY = y + LIGHT_DISTANCE;
+        for (int i = startX; i < stopX-1; i++)
+        {
+            for (int j = startY; j < stopY-1; j++)
+            {
+                if (i >= 0 && i < ARENA_SIZE_X && j >= 0 && j < ARENA_SIZE_Y)
+                {
+                    if (arena[i, j] == 0)
+                    {
+                        arenaSquares[i, j].GetComponent<Image>().color =
+                            Color.gray;
+                    }
+                }
+            }
+        }
+    }
+
+    public bool LightNearby(int x,int y){
+        int startX = x - LIGHT_DISTANCE;
+        int startY = y - LIGHT_DISTANCE;
+
+        int stopX = x + LIGHT_DISTANCE;
+        int stopY = y + LIGHT_DISTANCE;
+        for (int i = startX; i < stopX; i++)
+        {
+            for (int j = startY; j < stopY; j++)
+            {
+                if (i >= 0 && i < ARENA_SIZE_X && j >= 0 && j < ARENA_SIZE_Y && arena[i,j]==1)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    void MakeAllBlack()
+    {
+        List<Vector2> lights = new List<Vector2>();
+        for (int i = 0; i < ARENA_SIZE_X; i++)
+        {
+            for (int j = 0; j < ARENA_SIZE_Y; j++)
+            {
+                if (arena[i, j] != 1)
+                {
+                    arenaSquares[i, j].GetComponent<Image>().color =
+                        Color.black;
+                }
+                else
+                {
+                    lights.Add(new Vector2(i, j));
+                }
+            }
+        }
+        for (int i = 0; i < lights.Count; ++i)
+        {
+            int x = (int)(lights[i].x);
+            int y = (int)(lights[i].y);
+            LightNeighbours(x, y);
+        }
+    }
+
+    void MakeNormal()
+    {
+        for (int i = 0; i < ARENA_SIZE_X; i++)
+        {
+            for (int j = 0; j < ARENA_SIZE_Y; j++)
+            {
+                if (arena[i, j] == -1)
+                {
+                    arenaSquares[i, j].GetComponent<Image>().color =
+                        Color.black;
+                }
+                else if (arena[i, j] == 1)
+                {
+                    arenaSquares[i, j].GetComponent<Image>().color =
+                        Color.yellow;
+                }
+                else
+                {
+                    arenaSquares[i, j].GetComponent<Image>().color = Color.gray;
+                }
+            }
+        }
     }
 }
