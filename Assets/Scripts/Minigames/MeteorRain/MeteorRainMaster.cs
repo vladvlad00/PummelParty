@@ -115,6 +115,21 @@ public class MeteorRainMaster : MinigameMaster
 
     public override void OnPlayerKeyDown(int playerId, KeyCode key)
     {
+        return;
+    }
+
+    public override void OnPlayerMouseClick(int playerId)
+    {
+        return;
+    }
+
+    public override void OnPlayerMouseMove(int playerId, Vector2 pos)
+    {
+        return;
+    }
+
+    public override void OnPlayerKeyHold(int playerId, KeyCode key)
+    {
         // Find the player who pressed the key
         MeteorRainPlayer player = players.Find((x) => x.data.id == playerId);
 
@@ -133,15 +148,5 @@ public class MeteorRainMaster : MinigameMaster
                 player.rigidBody.velocity = new Vector2(MeteorRainPlayer.SPEED, 0f);
                 break;
         }
-    }
-
-    public override void OnPlayerMouseClick(int playerId)
-    {
-        return;
-    }
-
-    public override void OnPlayerMouseMove(int playerId, Vector2 pos)
-    {
-        return;
     }
 }

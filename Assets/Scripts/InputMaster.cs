@@ -5,6 +5,7 @@ public static class InputMaster
     public enum EventType
     {
         KEY_DOWN,
+        KEY_HOLD,
         MOUSE_CLICK,
         MOUSE_MOVE
     }
@@ -18,6 +19,7 @@ public static class InputMaster
         public int playerId;
 
         public bool KeyDown(KeyCode code) => type == EventType.KEY_DOWN && key == code;
+        public bool KeyHold(KeyCode code) => type == EventType.KEY_HOLD && key == code;
         public bool MouseDown() => type == EventType.MOUSE_CLICK;
         public bool MouseMove() => type == EventType.MOUSE_MOVE;
     }
@@ -39,12 +41,20 @@ public static class InputMaster
             case EventType.MOUSE_MOVE:
                 minigameMaster.OnPlayerMouseMove(e.playerId, e.mouse);
                 break;
+            case EventType.KEY_HOLD:
+                minigameMaster.OnPlayerKeyHold(e.playerId, e.key);
+                break;
         }
     }
 
     public static bool GetKeyDown(KeyCode key)
     {
         return GameMaster.InputEnabled() && Input.GetKeyDown(key);
+    }
+
+    public static bool GetKeyHold(KeyCode key)
+    {
+        return GameMaster.InputEnabled() && Input.GetKey(key);
     }
 
     public static bool GetMouseButtonDown(int button)

@@ -422,4 +422,9 @@ public class DarkLabirinthMaster : MinigameMaster
     {
         return;
     }
+
+    public override void OnPlayerKeyHold(int playerId, KeyCode key)
+    {
+        return;
+    }
 }

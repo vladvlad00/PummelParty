@@ -14,6 +14,16 @@ public static class InputSensor
         InputMaster.SendEvent(e);
     }
 
+    public static void TriggerKeyHold(KeyCode code, int playerId)
+    {
+        InputMaster.Event e = new InputMaster.Event();
+        e.type = InputMaster.EventType.KEY_HOLD;
+        e.key = code;
+        e.playerId = playerId;
+
+        InputMaster.SendEvent(e);
+    }
+
     public static void TriggerMouseClick(int playerId)
     {
         InputMaster.Event e = new InputMaster.Event();
