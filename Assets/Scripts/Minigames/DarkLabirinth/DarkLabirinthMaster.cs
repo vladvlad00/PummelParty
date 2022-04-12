@@ -12,9 +12,11 @@ public class DarkLabirinthMaster : MinigameMaster
 
     private const int padding = 1;
 
-    private const int light_distance = 3;
+    private const int light_distance = 2;
 
     private int players_that_finished = 0;
+
+    private bool gameDone = false;
 
     private readonly Vector2Int[]
         startPositions =
@@ -35,7 +37,7 @@ public class DarkLabirinthMaster : MinigameMaster
 
     private float total_time_passed = 0f;
 
-    private float round_max_time = 120f;
+    private float round_max_time = 10f;
 
     private bool make_black = true;
 
@@ -44,8 +46,6 @@ public class DarkLabirinthMaster : MinigameMaster
     private float minY;
 
     private float squareSize;
-
-    private int freeSquares = ARENA_SIZE_X * ARENA_SIZE_Y * 2;
 
     [NonSerialized]
     public List<DarkLabirinthPlayer> players;
@@ -75,16 +75,12 @@ public class DarkLabirinthMaster : MinigameMaster
         InitInputMaster();
 
         Vector3[] corners = new Vector3[4];
-        canvasTransform.GetLocalCorners (corners);
+        canvasTransform.GetLocalCorners(corners);
         minX = corners[0].x;
         minY = corners[0].y;
         float maxX = corners[2].x;
         float maxY = corners[2].y;
 
-        Debug.Log (minX);
-        Debug.Log (minY);
-        Debug.Log (maxX);
-        Debug.Log (maxY);
         float sizeX = maxX - minX;
         float sizeY = maxY - minY;
         squareSize =
@@ -127,14 +123,13 @@ public class DarkLabirinthMaster : MinigameMaster
         {
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
-            arena[startPositions[i].x, startPositions[i].y] = data.id;
             Vector3 playerPos =
                 getPosFromLineCol(startPositions[i].x, startPositions[i].y);
 
             GameObject obj =
                 Instantiate(playerPrefab, playerPos, Quaternion.identity);
             obj.GetComponent<RectTransform>().SetParent(canvasTransform, false);
-            obj.GetComponent<RectTransform>().sizeDelta = new Vector2(20, 20);
+            obj.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize, squareSize); //20 20
 
             players.Add(obj.GetComponent<DarkLabirinthPlayer>());
             players[i].pos = startPositions[i];
@@ -159,7 +154,6 @@ public class DarkLabirinthMaster : MinigameMaster
                 arena[currentX, i] = 0;
                 arenaSquares[currentX, i].GetComponent<Image>().color =
                     Color.gray;
-                freeSquares--;
             }
 
             prevX = currentX;
@@ -171,7 +165,6 @@ public class DarkLabirinthMaster : MinigameMaster
                     arena[i, currentY] = 0;
                     arenaSquares[i, currentY].GetComponent<Image>().color =
                         Color.gray;
-                    freeSquares--;
                 }
             }
             else
@@ -181,7 +174,6 @@ public class DarkLabirinthMaster : MinigameMaster
                     arena[i, currentY] = 0;
                     arenaSquares[i, currentY].GetComponent<Image>().color =
                         Color.gray;
-                    freeSquares--;
                 }
             }
         }
@@ -197,7 +189,6 @@ public class DarkLabirinthMaster : MinigameMaster
                         arena[i, j] = 0;
                         arenaSquares[i, j].GetComponent<Image>().color =
                             Color.gray;
-                        freeSquares--;
                         if (
                             UnityEngine.Random.Range(0, 5) % 5 == 0 &&
                             i > light_distance &&
@@ -255,6 +246,8 @@ public class DarkLabirinthMaster : MinigameMaster
         {
             player.pos.x = startPositions[playerId].x;
             player.pos.y = startPositions[playerId].y;
+            player.GetComponent<RectTransform>().localPosition =
+                getPosFromLineCol(startPositions[playerId].x, startPositions[playerId].y);
             return;
         }
 
@@ -268,29 +261,6 @@ public class DarkLabirinthMaster : MinigameMaster
             players_that_finished += 1;
             player.finishedGame = true;
             player.position = players_that_finished;
-        }
-        if (freeSquares == 0)
-        {
-            Dictionary<int, int> playerScores = new Dictionary<int, int>();
-            foreach (DarkLabirinthPlayer p in players)
-            playerScores.Add(p.data.id, 0);
-            for (int i = 0; i < ARENA_SIZE_X; i++)
-            for (int j = 0; j < ARENA_SIZE_Y; j++) playerScores[arena[i, j]]++;
-            GameMaster.INSTANCE.minigameScoreboard = new List<PlayerData>();
-            foreach (DarkLabirinthPlayer p in players)
-            GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
-
-            GameMaster
-                .INSTANCE
-                .minigameScoreboard
-                .Sort((p1, p2) =>
-                {
-                    if (playerScores[p1.id] == playerScores[p2.id])
-                        return p2.id - p1.id;
-                    return playerScores[p2.id] - playerScores[p1.id];
-                });
-
-            TaleExtra.MinigameScoreboard();
         }
     }
 
@@ -369,6 +339,8 @@ public class DarkLabirinthMaster : MinigameMaster
 
     void Update()
     {
+        if (gameDone)
+            return;
         elapsedTime += Time.deltaTime;
         Debug.Log("Elapsed time: " + elapsedTime);
         if (elapsedTime > time_before_swap)
@@ -425,7 +397,7 @@ public class DarkLabirinthMaster : MinigameMaster
             }
             GameMaster.INSTANCE.minigameScoreboard = new List<PlayerData>();
             foreach (DarkLabirinthPlayer p in players)
-            GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
+                GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
 
             GameMaster
                 .INSTANCE
@@ -436,6 +408,7 @@ public class DarkLabirinthMaster : MinigameMaster
                         return p2.id - p1.id;
                     return playerScores[p2.id] - playerScores[p1.id];
                 });
+            gameDone = true;
             TaleExtra.MinigameScoreboard();
         }
     }
