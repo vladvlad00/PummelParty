@@ -7,18 +7,8 @@ public class ColorRunPlayer : MonoBehaviour
 {
     [NonSerialized]
     public PlayerData data;
-    [NonSerialized]
-    public Rigidbody2D rigidBody;
-    [NonSerialized]
-    public new Transform transform;
 
     public Vector2Int pos;
-
-    void Awake()
-    {
-        rigidBody = GetComponent<Rigidbody2D>();
-        transform = GetComponent<Transform>();
-    }
 
     void Update()
     {

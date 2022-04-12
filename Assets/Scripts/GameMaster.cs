@@ -53,7 +53,8 @@ public class GameMaster : MonoBehaviour
         MeteorRain,
         Baseball,
         ColorRun,
-        DarkLabirinth
+        DarkLabirinth,
+        FallingFloor
     }
 
     public static bool INPUT_ENABLED = true;
