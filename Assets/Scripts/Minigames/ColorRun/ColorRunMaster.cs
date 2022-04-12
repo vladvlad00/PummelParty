@@ -80,7 +80,7 @@ public class ColorRunMaster : MinigameMaster
         {
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
-            arenaSquares[startPositions[i].x, startPositions[i].y].GetComponent<Image>().color = data.color;
+            arenaSquares[startPositions[i].x, startPositions[i].y].GetComponent<Image>().color = data.superColor.color;
             freeSquares--;
             arena[startPositions[i].x, startPositions[i].y] = data.id;
             Vector3 playerPos = getPosFromLineCol(startPositions[i].x, startPositions[i].y);
@@ -136,7 +136,7 @@ public class ColorRunMaster : MinigameMaster
             freeSquares--;
         player.GetComponent<RectTransform>().localPosition = getPosFromLineCol(newX, newY);
         arena[newX, newY] = player.data.id;
-        arenaSquares[newX, newY].GetComponent<Image>().color = player.data.color;
+        arenaSquares[newX, newY].GetComponent<Image>().color = player.data.superColor.color;
         Debug.Log(freeSquares + " squares left");
 
         if (freeSquares == 0)

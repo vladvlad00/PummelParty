@@ -67,6 +67,11 @@ public class Player : MonoBehaviour {
         RecalculateIntermediary();
     }
 
+    public void ChangeColor(Material m)
+    {
+        GetComponent<Renderer>().material = m;
+    }
+
     public void Reposition()
     {
         Vector3 pos = data.GetSpot().transform.position;

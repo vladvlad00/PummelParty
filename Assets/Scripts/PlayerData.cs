@@ -24,15 +24,15 @@ public class PlayerData
     [NonSerialized]
     public int hp = MAX_HP;
 
-    public Color color;
+    public GameMaster.SuperColor superColor;
 
     [NonSerialized]
     public List<ItemStack> stacks = new List<ItemStack>();
 
-    public PlayerData(string name, Color color)
+    public PlayerData(string name, GameMaster.SuperColor superColor)
     {
         this.name = name;
-        this.color = color;
+        this.superColor = superColor;
         this.id = playersNum++;
     }
     public Spot GetSpot()

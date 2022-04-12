@@ -12,7 +12,7 @@ public class ColorPicker : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
-        GetComponent<Image>().color = GameMaster.playerColors[colorIndex];
+        GetComponent<Image>().color = GameMaster.playerColors[colorIndex].color;
         selected[colorIndex] = true;
     }
 
@@ -23,7 +23,7 @@ public class ColorPicker : MonoBehaviour, IPointerClickHandler
             selected[colorIndex] = false;
             colorIndex = (colorIndex + 1) % GameMaster.playerColors.Length;
         } while (selected[colorIndex]);
-        GetComponent<Image>().color = GameMaster.playerColors[colorIndex];
+        GetComponent<Image>().color = GameMaster.playerColors[colorIndex].color;
         selected[colorIndex] = true;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.UI;
 
 public class BaseballMaster : MinigameMaster
 {
@@ -58,13 +59,14 @@ public class BaseballMaster : MinigameMaster
 
             //RectTransform transform = obj.GetComponent<RectTransform>();
             //transform.SetParent(canvasTransform, false);
-            drawCircle(basePos.x);
+            drawCircle(basePos.x, data.superColor.color);
 
             players.Add(obj.GetComponent<BaseballPlayer>());
             players[i].data = data;
 
             GameObject playerBall = Instantiate(ballPrefab, new Vector3(basePos.x / 10, ballStartY, -100f), Quaternion.identity);
             playerBall.GetComponent<RectTransform>().SetParent(boardTransform, false);
+            playerBall.GetComponent<Renderer>().material = data.superColor.material;
             players[i].ball = playerBall;
             players[i].initPos = playerBall.transform.position;
 
@@ -74,7 +76,7 @@ public class BaseballMaster : MinigameMaster
             GameObject txt = new GameObject();
             txt.AddComponent<TextMeshProUGUI>();
             txt.GetComponent<TextMeshProUGUI>().SetText("Score: 0");
-            txt.GetComponent<TextMeshProUGUI>().color = new Color(0f, 0f, 1f);
+            txt.GetComponent<TextMeshProUGUI>().color = data.superColor.color;
             txt.GetComponent<TextMeshProUGUI>().fontSize = 24;
             txt.transform.position = new Vector3(basePos.x + 150, -30f, 0f);
             txt.transform.SetParent(canvasTransform, false);
@@ -84,7 +86,7 @@ public class BaseballMaster : MinigameMaster
             GameObject hit = new GameObject();
             hit.AddComponent<TextMeshProUGUI>();
             hit.GetComponent<TextMeshProUGUI>().SetText("");
-            hit.GetComponent<TextMeshProUGUI>().color = new Color(0f, 0f, 1f);
+            hit.GetComponent<TextMeshProUGUI>().color = data.superColor.color;
             hit.GetComponent<TextMeshProUGUI>().fontSize = 32;
             hit.transform.position = new Vector3(basePos.x + 150, 30f, 0f);
             hit.transform.SetParent(canvasTransform, false);
@@ -141,10 +143,11 @@ public class BaseballMaster : MinigameMaster
         }
     }
 
-    public void drawCircle(float playerX)
+    public void drawCircle(float playerX, Color c)
     {
         GameObject circleObj = Instantiate(circlePrefab, new Vector3(playerX, 0f, -1f), Quaternion.identity);
         circleObj.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        circleObj.GetComponent<Image>().color = c;
         circleObj.GetComponent<RectTransform>().SetParent(canvasTransform, false);
     }
 

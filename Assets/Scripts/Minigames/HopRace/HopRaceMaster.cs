@@ -30,7 +30,7 @@ public class HopRaceMaster : MinigameMaster
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
             GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.identity);
-            obj.GetComponent<Image>().color = data.color;
+            obj.GetComponent<Image>().color = data.superColor.color;
 
             RectTransform transform = obj.GetComponent<RectTransform>();
             transform.SetParent(canvasTransform, false);

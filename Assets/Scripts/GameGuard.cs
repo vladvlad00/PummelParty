@@ -110,6 +110,7 @@ public class GameGuard : MonoBehaviour
 
             players[i].data = GameMaster.INSTANCE.playerData[i];
             players[i].Reposition();
+            players[i].ChangeColor(GameMaster.INSTANCE.playerData[i].superColor.material);
         }
     }
 

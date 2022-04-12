@@ -60,7 +60,7 @@ public class MeteorRainMaster : MinigameMaster
             Vector3 playerPos = new Vector3((wallPos.x + nextWallPos.x) / 2, PLAYER_Y, 0f);
 
             obj = Instantiate(playerPrefab, playerPos, Quaternion.identity);
-            obj.GetComponent<Image>().color = data.color;
+            obj.GetComponent<Image>().color = data.superColor.color;
             transform = obj.GetComponent<RectTransform>();
             transform.SetParent(canvasTransform, false);
 

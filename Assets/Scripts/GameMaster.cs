@@ -16,16 +16,33 @@ public class GameMaster : MonoBehaviour
         SPOT_MINIGAME_FINISHED
     }
 
-    public static readonly Color[] playerColors =
+    public class SuperColor
     {
-        Color.red,
-        Color.green,
-        Color.blue,
-        Color.yellow,
-        Color.cyan,
-        Color.gray,
-        Color.magenta,
-        Color.black
+        public Color color;
+        public Material material;
+        public string name;
+
+        public SuperColor(Color c, string s)
+        {
+            color = c;
+            name = s;
+        }
+
+        public void SetMaterial(Material m)
+        {
+            material = m;
+        }
+    }
+
+    public static readonly SuperColor[] playerColors = {
+            new SuperColor(Color.red, "red"),
+            new SuperColor(Color.green, "green"),
+            new SuperColor(Color.blue, "blue"),
+            new SuperColor(Color.yellow, "yellow"),
+            new SuperColor(Color.cyan, "cyan"),
+            new SuperColor(Color.gray, "gray"),
+            new SuperColor(Color.magenta, "magenta"),
+            new SuperColor(Color.black, "black")
     };
 
     public enum Minigame
@@ -79,7 +96,16 @@ public class GameMaster : MonoBehaviour
 
     void Awake()
     {
-        if(INSTANCE != null)
+        playerColors[0].SetMaterial(Resources.Load("Materials/Red", typeof(Material)) as Material);
+        playerColors[1].SetMaterial(Resources.Load("Materials/Green", typeof(Material)) as Material);
+        playerColors[2].SetMaterial(Resources.Load("Materials/Blue", typeof(Material)) as Material);
+        playerColors[3].SetMaterial(Resources.Load("Materials/Yellow", typeof(Material)) as Material);
+        playerColors[4].SetMaterial(Resources.Load("Materials/Cyan", typeof(Material)) as Material);
+        playerColors[5].SetMaterial(Resources.Load("Materials/Gray", typeof(Material)) as Material);
+        playerColors[6].SetMaterial(Resources.Load("Materials/Magenta", typeof(Material)) as Material);
+        playerColors[7].SetMaterial(Resources.Load("Materials/Black", typeof(Material)) as Material);
+
+        if (INSTANCE != null)
         {
             Destroy(gameObject);
             return;
