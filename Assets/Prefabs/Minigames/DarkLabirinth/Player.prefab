@@ -60,6 +60,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0}
+  finishedGame: 0
+  position: 0
 --- !u!114 &116875177740052286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,7 +82,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a7560b3e7ac7155489351c00ddaedbad, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1af37af485a856f4c9af6d6f504d9634, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
