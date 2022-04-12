@@ -54,7 +54,8 @@ public class GameMaster : MonoBehaviour
         Baseball,
         ColorRun,
         DarkLabirinth,
-        FallingFloor
+        FallingFloor,
+        UwUBridges
     }
 
     public static bool INPUT_ENABLED = true;

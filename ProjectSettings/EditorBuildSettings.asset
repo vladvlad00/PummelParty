@@ -38,4 +38,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigames/FallingFloor.unity
     guid: 6015093be43837b42b3f7434e1035bec
+  - enabled: 1
+    path: Assets/Scenes/Minigames/UwUBridges.unity
+    guid: ba13b6345e5392349a60d396927d7087
   m_configObjects: {}
