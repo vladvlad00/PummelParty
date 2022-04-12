@@ -226,4 +226,9 @@ public class BaseballMaster : MinigameMaster
 
         TaleExtra.MinigameScoreboard();
     }
+
+    public override void OnPlayerKeyHold(int playerId, KeyCode key)
+    {
+        return;
+    }
 }

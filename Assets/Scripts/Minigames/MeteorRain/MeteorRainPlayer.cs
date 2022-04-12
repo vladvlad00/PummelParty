@@ -38,5 +38,22 @@ public class MeteorRainPlayer : MonoBehaviour
         {
             InputSensor.TriggerKey(KeyCode.D, 1);
         }
+
+        if (data.id == 0 && InputMaster.GetKeyHold(KeyCode.A))
+        {
+            InputSensor.TriggerKeyHold(KeyCode.A, 0);
+        }
+        else if (data.id == 0 && InputMaster.GetKeyHold(KeyCode.D))
+        {
+            InputSensor.TriggerKeyHold(KeyCode.D, 0);
+        }
+        else if (data.id == 1 && InputMaster.GetKeyHold(KeyCode.LeftArrow))
+        {
+            InputSensor.TriggerKeyHold(KeyCode.A, 1);
+        }
+        else if (data.id == 1 && InputMaster.GetKeyHold(KeyCode.RightArrow))
+        {
+            InputSensor.TriggerKeyHold(KeyCode.D, 1);
+        }
     }
 }

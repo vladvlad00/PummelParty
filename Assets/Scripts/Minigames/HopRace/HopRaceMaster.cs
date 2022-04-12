@@ -75,4 +75,9 @@ public class HopRaceMaster : MinigameMaster
     {
         return;
     }
+
+    public override void OnPlayerKeyHold(int playerId, KeyCode key)
+    {
+        return;
+    }
 }
