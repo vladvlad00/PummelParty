@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class ColorRunMaster : MinigameMaster
+public class FallingFloorMaster : MinigameMaster
 {
     private const int ARENA_SIZE = 10;
     private const int padding = 2;
@@ -23,21 +23,25 @@ public class ColorRunMaster : MinigameMaster
     private float minX;
     private float minY;
     private float squareSize;
-    private int freeSquares = ARENA_SIZE * ARENA_SIZE;
+
     [NonSerialized]
-    public List<ColorRunPlayer> players;
+    public List<FallingFloorPlayer> players;
     [SerializeField]
     RectTransform canvasTransform;
     [SerializeField]
     GameObject playerPrefab;
     [SerializeField]
     GameObject squarePrefab;
+    [SerializeField]
+    GameObject wallPrefab;
 
     int[,] arena;
     GameObject[,] arenaSquares;
 
-    private Vector3 getPosFromLineCol(int i, int j)
+    private Vector3 getPosFromLineCol(int i, int j, bool isWall = false)
     {
+        if (!isWall)
+            return new Vector3(minX + (j + 1) * (squareSize + padding), minY + (i + 1) * (squareSize + padding), 0);
         return new Vector3(minX + j * (squareSize + padding), minY + i * (squareSize + padding), 0);
     }
 
@@ -53,7 +57,7 @@ public class ColorRunMaster : MinigameMaster
         float maxY = corners[2].y;
         float sizeX = maxX - minX;
         float sizeY = maxY - minY;
-        squareSize = (Math.Min(sizeX, sizeY) - (ARENA_SIZE - 1) * padding) / ARENA_SIZE;
+        squareSize = (Math.Min(sizeX, sizeY) - (ARENA_SIZE + 1) * padding) / (ARENA_SIZE + 2);
         minX += squareSize / 2;
         minY += squareSize / 2;
         if (sizeX > sizeY)
@@ -61,14 +65,14 @@ public class ColorRunMaster : MinigameMaster
         else
             minY += (sizeY - sizeX) / 2;
 
-        players = new List<ColorRunPlayer>();
+        players = new List<FallingFloorPlayer>();
         arena = new int[ARENA_SIZE, ARENA_SIZE];
         arenaSquares = new GameObject[ARENA_SIZE, ARENA_SIZE];
         for (int i = 0; i < ARENA_SIZE; i++)
         {
             for (int j = 0; j < ARENA_SIZE; j++)
             {
-                arena[i, j] = -1;
+                arena[i, j] = 0;
                 Vector3 pos = getPosFromLineCol(i, j);
                 arenaSquares[i, j] = Instantiate(squarePrefab, pos, Quaternion.identity);
                 arenaSquares[i, j].GetComponent<RectTransform>().SetParent(canvasTransform, false);
@@ -76,90 +80,52 @@ public class ColorRunMaster : MinigameMaster
             }
         }
 
+        for (int i = 0; i < ARENA_SIZE + 2; i++)
+        {
+            Vector3 pos = getPosFromLineCol(i, 0, true);
+            GameObject wall = Instantiate(wallPrefab, pos, Quaternion.identity);
+            wall.GetComponent<RectTransform>().SetParent(canvasTransform, false);
+            wall.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize, squareSize);
+            wall.GetComponent<BoxCollider2D>().size = new Vector2(squareSize, squareSize);
+
+            pos = getPosFromLineCol(i, ARENA_SIZE + 1, true);
+            wall = Instantiate(wallPrefab, pos, Quaternion.identity);
+            wall.GetComponent<RectTransform>().SetParent(canvasTransform, false);
+            wall.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize, squareSize);
+            wall.GetComponent<BoxCollider2D>().size = new Vector2(squareSize, squareSize);
+
+            pos = getPosFromLineCol(0, i, true);
+            wall = Instantiate(wallPrefab, pos, Quaternion.identity);
+            wall.GetComponent<RectTransform>().SetParent(canvasTransform, false);
+            wall.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize, squareSize);
+            wall.GetComponent<BoxCollider2D>().size = new Vector2(squareSize, squareSize);
+
+            pos = getPosFromLineCol(ARENA_SIZE + 1, i, true);
+            wall = Instantiate(wallPrefab, pos, Quaternion.identity);
+            wall.GetComponent<RectTransform>().SetParent(canvasTransform, false);
+            wall.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize, squareSize);
+            wall.GetComponent<BoxCollider2D>().size = new Vector2(squareSize, squareSize);
+        }
+
         for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count; i++)
         {
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
-            arenaSquares[startPositions[i].x, startPositions[i].y].GetComponent<Image>().color = data.color;
-            freeSquares--;
-            arena[startPositions[i].x, startPositions[i].y] = data.id;
             Vector3 playerPos = getPosFromLineCol(startPositions[i].x, startPositions[i].y);
 
             GameObject obj = Instantiate(playerPrefab, playerPos, Quaternion.identity);
             obj.GetComponent<RectTransform>().SetParent(canvasTransform, false);
-            obj.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize, squareSize); // 60 60
+            obj.GetComponent<RectTransform>().sizeDelta = new Vector2(squareSize * 0.8f, squareSize * 0.8f);
+            obj.GetComponent<BoxCollider2D>().size = new Vector2(squareSize * 0.8f, squareSize * 0.8f);
 
-            players.Add(obj.GetComponent<ColorRunPlayer>());
-            players[i].pos = startPositions[i];
+            players.Add(obj.GetComponent<FallingFloorPlayer>());
             players[i].data = data;
         }
     }
 
     public override void OnPlayerKeyDown(int playerId, KeyCode key)
     {
-        // Find the player who pressed the key
-        ColorRunPlayer player = players.Find((x) => x.data.id == playerId);
-
-        if (!player)
-        {
-            return;
-        }
-
-        int dx = 0, dy = 0;
-        // Handle the key
-        switch (key)
-        {
-            case KeyCode.W:
-                dx = 1;
-                break;
-            case KeyCode.S:
-                dx = -1;
-                break;
-            case KeyCode.A:
-                dy = -1;
-                break;
-            case KeyCode.D:
-                dy = 1;
-                break;
-        }
-        int newX = player.pos.x + dx;
-        int newY = player.pos.y + dy;
-        if (newX >= ARENA_SIZE || newX < 0 || newY >= ARENA_SIZE || newY < 0)
-            return;
-        int col = arena[newX, newY];
-        if (col != -1 && col != player.data.id)
-            return;
-        player.pos.x = newX;
-        player.pos.y = newY;
-
-        if (col == -1)
-            freeSquares--;
-        player.GetComponent<RectTransform>().localPosition = getPosFromLineCol(newX, newY);
-        arena[newX, newY] = player.data.id;
-        arenaSquares[newX, newY].GetComponent<Image>().color = player.data.color;
-        Debug.Log(freeSquares + " squares left");
-
-        if (freeSquares == 0)
-        {
-            Dictionary<int, int> playerScores = new Dictionary<int, int>();
-            foreach (ColorRunPlayer p in players)
-                playerScores.Add(p.data.id, 0);
-            for (int i = 0; i < ARENA_SIZE; i++)
-                for (int j = 0; j < ARENA_SIZE; j++)
-                    playerScores[arena[i, j]]++;
-            GameMaster.INSTANCE.minigameScoreboard = new List<PlayerData>();
-            foreach (ColorRunPlayer p in players)
-                GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
-
-            GameMaster.INSTANCE.minigameScoreboard.Sort((p1, p2) =>
-            {
-                if (playerScores[p1.id] == playerScores[p2.id])
-                    return p2.id - p1.id;
-                return playerScores[p2.id] - playerScores[p1.id];
-            });
-
-            TaleExtra.MinigameScoreboard();
-        }
+        return;
     }
 
     public override void OnPlayerMouseClick(int playerId)
@@ -174,6 +140,31 @@ public class ColorRunMaster : MinigameMaster
 
     public override void OnPlayerKeyHold(int playerId, KeyCode key)
     {
-        return;
+        // Find the player who pressed the key
+        FallingFloorPlayer player = players.Find((x) => x.data.id == playerId);
+
+        if (!player)
+        {
+            return;
+        }
+
+        int dx = 0, dy = 0;
+        // Handle the key
+        switch (key)
+        {
+            case KeyCode.W:
+                dy = 1;
+                break;
+            case KeyCode.S:
+                dy = -1;
+                break;
+            case KeyCode.A:
+                dx = -1;
+                break;
+            case KeyCode.D:
+                dx = 1;
+                break;
+        }
+        player.rigidBody.AddForce(new Vector2(dx, dy), ForceMode2D.Impulse);
     }
 }
