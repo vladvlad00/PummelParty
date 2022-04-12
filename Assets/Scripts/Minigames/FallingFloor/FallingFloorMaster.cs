@@ -322,7 +322,7 @@ public class FallingFloorMaster : MinigameMaster
         return;
     }
 
-    public override void OnPlayerMouseClick(int playerId)
+    public override void OnPlayerMouseClick(int playerId, bool rightClick)
     {
         return;
     }

@@ -16,6 +16,7 @@ public static class InputMaster
 
         public KeyCode key;
         public Vector2 mouse;
+        public bool rightClick;
         public int playerId;
 
         public bool KeyDown(KeyCode code) => type == EventType.KEY_DOWN && key == code;
@@ -36,7 +37,7 @@ public static class InputMaster
                 minigameMaster.OnPlayerKeyDown(e.playerId, e.key);
                 break;
             case EventType.MOUSE_CLICK:
-                minigameMaster.OnPlayerMouseClick(e.playerId);
+                minigameMaster.OnPlayerMouseClick(e.playerId, e.rightClick);
                 break;
             case EventType.MOUSE_MOVE:
                 minigameMaster.OnPlayerMouseMove(e.playerId, e.mouse);

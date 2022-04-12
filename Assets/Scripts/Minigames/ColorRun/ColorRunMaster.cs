@@ -162,7 +162,7 @@ public class ColorRunMaster : MinigameMaster
         }
     }
 
-    public override void OnPlayerMouseClick(int playerId)
+    public override void OnPlayerMouseClick(int playerId, bool rightClick)
     {
         return;
     }

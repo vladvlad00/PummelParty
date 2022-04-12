@@ -9,6 +9,6 @@ public abstract class MinigameMaster : MonoBehaviour
 
     public abstract void OnPlayerKeyDown(int playerId, KeyCode key);
     public abstract void OnPlayerKeyHold(int playerId, KeyCode key);
-    public abstract void OnPlayerMouseClick(int playerId);
+    public abstract void OnPlayerMouseClick(int playerId, bool rightClick);
     public abstract void OnPlayerMouseMove(int playerId, Vector2 pos);
 }

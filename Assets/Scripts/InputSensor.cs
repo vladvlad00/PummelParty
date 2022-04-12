@@ -24,11 +24,12 @@ public static class InputSensor
         InputMaster.SendEvent(e);
     }
 
-    public static void TriggerMouseClick(int playerId)
+    public static void TriggerMouseClick(int playerId, bool rightClick = false)
     {
         InputMaster.Event e = new InputMaster.Event();
         e.type = InputMaster.EventType.MOUSE_CLICK;
         e.playerId = playerId;
+        e.rightClick = rightClick;
 
         InputMaster.SendEvent(e);
     }
