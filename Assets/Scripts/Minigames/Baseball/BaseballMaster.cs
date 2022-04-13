@@ -120,7 +120,7 @@ public class BaseballMaster : MinigameMaster
                 player.ball.GetComponent<BaseballBall>().hit = false;
                 player.ball.GetComponent<BaseballBall>().stopSmall();
                 player.resetBallBool = false;
-                Debug.Log(player.ball.GetComponent<Rigidbody>().velocity);
+                //Debug.Log(player.ball.GetComponent<Rigidbody>().velocity);
                 player.ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 player.iter++;
                 float pwr = Math.Max(maxSpeed, -ballFormula(player.iter));

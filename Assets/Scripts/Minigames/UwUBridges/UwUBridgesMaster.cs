@@ -256,10 +256,9 @@ public class UwUBridgesMaster : MinigameMaster
     {
         if (roundPlaying)
         {
-            Debug.Log("Round playing");
             if (gameDone) return;
             elapsedTime += Time.deltaTime;
-            Debug.Log("Elapsed time: " + elapsedTime);
+
             if (elapsedTime > ROUND_MAX_TIME)
             {
                 int[] number_of_players_per_bridge = new int[8];
@@ -357,17 +356,17 @@ public class UwUBridgesMaster : MinigameMaster
 
                     if (addScore)
                     {
-                        Debug
-                            .Log("Player " +
-                            player.data.id +
-                            " scored " +
-                            arena[7 + player.xChosen, 7 + player.yChosen]+ "on round " +ROUNDS_REMAINING);
+                        //Debug
+                        //    .Log("Player " +
+                        //    player.data.id +
+                        //    " scored " +
+                        //    arena[7 + player.xChosen, 7 + player.yChosen]+ "on round " +ROUNDS_REMAINING);
                         player.score +=
                             arena[7 + player.xChosen, 7 + player.yChosen];
                     }
                     else
                     {
-                        Debug.Log("Player " + player.data.id + " missed "+ "on round " +ROUNDS_REMAINING);
+                        //Debug.Log("Player " + player.data.id + " missed "+ "on round " +ROUNDS_REMAINING);
                     }
                 }
                 elapsedTime = 0;
@@ -382,9 +381,9 @@ public class UwUBridgesMaster : MinigameMaster
                 scores[i] = players[i].score;
             }
             mgScoreboard.Update(scores,gameDone);
-            Debug.Log("Round not playing"+elapsedTime+" "+PAUSE_TIME);
+            //Debug.Log("Round not playing"+elapsedTime+" "+PAUSE_TIME);
             elapsedTime += Time.deltaTime;
-            Debug.Log("Elapsed time: " + elapsedTime);
+            //Debug.Log("Elapsed time: " + elapsedTime);
             if (elapsedTime > PAUSE_TIME){
                 int pos_counter=0;
                 foreach (UwUBridgesPlayer player in players)
@@ -456,8 +455,8 @@ public class UwUBridgesMaster : MinigameMaster
         foreach (UwUBridgesPlayer p in players)
         {
             playerScores.Add(p.data.id, p.score);
-            Debug.Log("Total score for player " +
-                        p.data.id +": " +p.score);
+            //Debug.Log("Total score for player " +
+            //            p.data.id +": " +p.score);
         }
 
         GameMaster.INSTANCE.minigameScoreboard =

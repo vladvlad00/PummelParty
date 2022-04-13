@@ -15,6 +15,11 @@ public class ItemContainerMaster : MonoBehaviour
 
     public void ShowItems()
     {
+        if(!GameMaster.INSTANCE.playerData[GameMaster.INSTANCE.currentPlayer].stacks.Exists(x => x.count > 0))
+        {
+            return;
+        }
+
         ItemContainerEntry dummy = Instantiate(itemPrefab, new Vector3(9999f, 9999f, 9999f), Quaternion.identity).GetComponent<ItemContainerEntry>();
 
         RectTransform tform = dummy.transform;

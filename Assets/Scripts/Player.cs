@@ -107,6 +107,8 @@ public class Player : MonoBehaviour {
 
             if(intermediarySpot.type == Spot.Type.CROWN)
             {
+                GameMaster.INSTANCE.guard.DisplayMessage(string.Format("{0} got a crown", data.name));
+
                 GameMaster.INSTANCE.RemoveCrownSpot();
 
                 moveCount = 0;
@@ -121,9 +123,11 @@ public class Player : MonoBehaviour {
                 {
                     case Spot.Type.TELEPORT:
                         data.TeleportToSpot(GameMaster.INSTANCE.guard.GetRandomSpot());
+                        GameMaster.INSTANCE.guard.DisplayMessage(string.Format("{0} got teleported", data.name));
                         break;
                     case Spot.Type.REV:
                         GameMaster.INSTANCE.ReverseMoveDirection();
+                        GameMaster.INSTANCE.guard.DisplayMessage(string.Format("The direction was reversed"));
                         break;
                     case Spot.Type.HP_PLUS:
                         data.ModifyHP(10);
@@ -132,8 +136,13 @@ public class Player : MonoBehaviour {
                         data.ModifyHP(-10);
                         break;
                     case Spot.Type.ITEM:
-                        data.AddItem(Item.ITEMS[UnityEngine.Random.Range(0, Item.ITEMS.Count)]);
-                        break;
+                        {
+                            Item item = Item.ITEMS[UnityEngine.Random.Range(0, Item.ITEMS.Count)];
+                            data.AddItem(item);
+
+                            GameMaster.INSTANCE.guard.DisplayMessage(string.Format("{0} found a {1}", data.name, item.name));
+                            break;
+                        }
                     case Spot.Type.COINS:
                         data.ModifyCoins(UnityEngine.Random.Range(10, 30));
                         break;
