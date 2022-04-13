@@ -33,6 +33,10 @@ public class GameGuard : MonoBehaviour
     public Material itemSpotMaterial;
     public Material startSpotMaterial;
 
+    public GameObject scorePrefab;
+    private GameObject[] scores;
+    public RectTransform canvasTransform;
+
     void Awake()
     {
         INSTANCE = this;
@@ -112,6 +116,8 @@ public class GameGuard : MonoBehaviour
             players[i].Reposition();
             players[i].ChangeColor(GameMaster.INSTANCE.playerData[i].superColor.material);
         }
+
+        CreateScores();
     }
 
     public bool IsGraveyard(Spot spot)
@@ -148,6 +154,62 @@ public class GameGuard : MonoBehaviour
                 newY -= 180;
             }
             arrows[i].transform.localEulerAngles = new Vector3(arrows[i].transform.eulerAngles.x, (float)newY, arrows[i].transform.eulerAngles.z);
+        }
+    }
+
+    public void CreateScores()
+    {
+        const float padding = 5f;
+
+        Vector3[] corners = new Vector3[4];
+        canvasTransform.GetLocalCorners(corners);
+        float minX = corners[0].x;
+        float minY = corners[0].y;
+        float maxX = corners[2].x;
+        float maxY = corners[2].y;
+        float sizeX = maxX - minX;
+        float sizeY = maxY - minY;
+        float scoreWidth = sizeX / 8;
+        float scoreHeight = sizeY / 9;
+        scores = new GameObject[players.Count];
+        for (int i = 0; i < players.Count; i++)
+        {
+            Vector3 pos = new Vector3(scoreWidth / 2, -(scoreHeight / 2 + ((padding + scoreHeight) * i)), 0);
+            scores[i] = Instantiate(scorePrefab, pos, Quaternion.identity);
+            scores[i].GetComponent<RectTransform>().SetParent(canvasTransform, false);
+            scores[i].GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+            scores[i].GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+            scores[i].GetComponent<RectTransform>().sizeDelta = new Vector2(scoreWidth, scoreHeight);
+            scores[i].GetComponent<PlayerScore>().data = players[i].data;
+        }
+    }
+
+    public void SortScores(int id)
+    {
+        int pos = 0;
+        for (int i=0;i<players.Count;i++)
+            if (scores[i].GetComponent<PlayerScore>().data.id == id)
+            {
+                pos = i;
+                break;
+            }
+
+        PlayerScore currentScore = scores[pos].GetComponent<PlayerScore>();
+        while (pos > 0)
+        {
+            PlayerScore nextScore = scores[pos-1].GetComponent<PlayerScore>();
+            if (currentScore.data.crowns > nextScore.data.crowns ||
+                currentScore.data.crowns == nextScore.data.crowns && currentScore.data.hp > nextScore.data.hp)
+            {
+                Vector3 temp = scores[pos].transform.position;
+                scores[pos].transform.position = scores[pos - 1].transform.position;
+                scores[pos-1].transform.position = temp;
+
+                GameObject obj = scores[pos];
+                scores[pos] = scores[pos - 1];
+                scores[pos - 1] = obj;
+            }
+            pos--;
         }
     }
 }

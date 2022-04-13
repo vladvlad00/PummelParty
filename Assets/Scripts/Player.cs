@@ -112,6 +112,7 @@ public class Player : MonoBehaviour {
                 moveCount = 0;
                 ++data.crowns;
                 GameMaster.INSTANCE.ChooseNewCrownSpot();
+                GameGuard.INSTANCE.SortScores(data.id);
             }
             if(moveCount == 0)
             {
