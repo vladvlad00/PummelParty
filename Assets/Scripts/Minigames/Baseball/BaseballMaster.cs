@@ -117,6 +117,7 @@ public class BaseballMaster : MinigameMaster
         {
             if ((player.resetBallBool && (DateTime.Now - player.resetBall).TotalSeconds >= maxBallTime) || (!player.resetBallBool && player.ball.transform.position.y <= ballStopY))
             {
+                player.ball.GetComponent<BaseballBall>().hit = false;
                 player.ball.GetComponent<BaseballBall>().stopSmall();
                 player.resetBallBool = false;
                 Debug.Log(player.ball.GetComponent<Rigidbody>().velocity);
@@ -156,7 +157,7 @@ public class BaseballMaster : MinigameMaster
                 {
                     return;
                 }
-                if (Math.Abs(player.ball.transform.position.y - 52) < 7)
+                if (Math.Abs(player.ball.transform.position.y - 52) < 7 && !player.ball.GetComponent<BaseballBall>().hit)
                 {
                     int modif = (int)Math.Pow(10 - Math.Abs(player.ball.transform.position.y - 52) / 7 * 10, 2);
                     player.score += modif;
@@ -166,6 +167,7 @@ public class BaseballMaster : MinigameMaster
                     player.resetBall = DateTime.Now;
                     player.ball.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.Range(-1000f, 1000f), UnityEngine.Random.Range(1000f, 2000f), 20000);
                     player.ball.GetComponent<BaseballBall>().startSmall(UnityEngine.Random.Range(0.015f, 0.025f));
+                    player.ball.GetComponent<BaseballBall>().hit = true;
                 }
                 else
                 {

@@ -24,6 +24,18 @@ public class PlayerData
     [NonSerialized]
     public int hp = MAX_HP;
 
+    [NonSerialized]
+    public int deaths = 0;
+
+    [NonSerialized]
+    public int kills = 0;
+
+    [NonSerialized]
+    public int minigames_won = 0;
+
+    [NonSerialized]
+    public int minigames_lost = 0;
+
     public GameMaster.SuperColor superColor;
 
     [NonSerialized]
