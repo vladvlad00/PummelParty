@@ -132,7 +132,7 @@ public class Player : MonoBehaviour {
                         data.ModifyHP(-10);
                         break;
                     case Spot.Type.ITEM:
-                        // Add item :)
+                        data.AddItem(Item.ITEMS[UnityEngine.Random.Range(0, Item.ITEMS.Count)]);
                         break;
                     case Spot.Type.COINS:
                         data.ModifyCoins(UnityEngine.Random.Range(10, 30));

@@ -34,6 +34,11 @@ public class PlayerData
         this.name = name;
         this.superColor = superColor;
         this.id = playersNum++;
+
+        for(int i = 0; i < Item.ITEMS.Count; ++i)
+        {
+            stacks.Add(new ItemStack(Item.ITEMS[i]));
+        }
     }
     public Spot GetSpot()
     {
@@ -64,6 +69,11 @@ public class PlayerData
 
             hp = MAX_HP;
         }
+    }
+
+    public void AddItem(Item item)
+    {
+        stacks.Find(x => x.item == item).count++;
     }
 
     public void ModifyCoins(int value)

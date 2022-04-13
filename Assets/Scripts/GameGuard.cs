@@ -11,6 +11,8 @@ public class GameGuard : MonoBehaviour
 
     public TextMeshProUGUI diceText;
     public GameObject board;
+    public Transform itemContainer;
+    public ItemContainerMaster itemContainerMaster;
 
     public List<Player> players;
     public GameObject pathPrefab;

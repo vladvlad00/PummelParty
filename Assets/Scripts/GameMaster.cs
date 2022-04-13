@@ -16,6 +16,7 @@ public class GameMaster : MonoBehaviour
         SPOT_MINIGAME_FINISHED
     }
 
+    [Serializable]
     public class SuperColor
     {
         public Color color;
@@ -94,7 +95,7 @@ public class GameMaster : MonoBehaviour
     [NonSerialized]
     public Minigame minigame;
 
-    int currentPlayer;
+    public int currentPlayer;
 
     void Awake()
     {
@@ -166,6 +167,11 @@ public class GameMaster : MonoBehaviour
         return INPUT_ENABLED && !Backport.IsOpen();
     }
 
+    public PlayerData GetCurrentPlayer()
+    {
+        return playerData[currentPlayer];
+    }
+
     public void OnSpotMinigameEnd()
     {
         state = State.SPOT_MINIGAME_FINISHED;
@@ -182,6 +188,7 @@ public class GameMaster : MonoBehaviour
 
         // Next turn
         currentPlayer = (currentPlayer + 1) % guard.players.Count;
+        guard.itemContainerMaster.ShowItems();
     }
 
     public void RemoveCrownSpot()
@@ -233,6 +240,8 @@ public class GameMaster : MonoBehaviour
 
         if (guard)
         {
+            guard.itemContainerMaster.ShowItems();
+
             if (crownSpotPos.x != -9999f)
             {
                 for (int i = 0; i < guard.boardSpots.Count; ++i)
@@ -274,6 +283,7 @@ public class GameMaster : MonoBehaviour
     {
         if (InputEnabled() && Input.GetKeyDown("space"))
         {
+            guard.itemContainerMaster.HideItems();
             OnPlayerRoll();
         }
     }
