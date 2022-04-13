@@ -39,6 +39,8 @@ public class BaseballMaster : MinigameMaster
     [NonSerialized]
     private bool gameEnded = false;
 
+    private GameTimer gameTimer;
+
     void Awake()
     {
         InitInputMaster();
@@ -95,6 +97,7 @@ public class BaseballMaster : MinigameMaster
             basePos.x += xModif * 2;
         }
         startTime = DateTime.Now;
+        gameTimer = new GameTimer(maxTime, timeText, finishGame);
     }   
 
     float ballFormula(int x)
@@ -108,28 +111,13 @@ public class BaseballMaster : MinigameMaster
         {
             return;
         }
-        double timeleft = (DateTime.Now - startTime).TotalSeconds;
-        string timeString = "";
-        if (timeleft < maxTime)
-        {
-            if (timeleft > 25) 
-            {
-                timeString = ((maxTime - timeleft).ToString() + "00000").Substring(0, 5);
-            }
-            else
-            {
-                timeString = ((int)(maxTime - timeleft)).ToString();
-            }
-            timeText.SetText("Time left: " + timeString + "s");
-        }
-        else
-        {
-            finishGame();
-        }
+        gameTimer.Update();
+
         foreach(BaseballPlayer player in players)
         {
             if ((player.resetBallBool && (DateTime.Now - player.resetBall).TotalSeconds >= maxBallTime) || (!player.resetBallBool && player.ball.transform.position.y <= ballStopY))
             {
+                player.ball.GetComponent<BaseballBall>().hit = false;
                 player.ball.GetComponent<BaseballBall>().stopSmall();
                 player.resetBallBool = false;
                 Debug.Log(player.ball.GetComponent<Rigidbody>().velocity);
@@ -169,7 +157,7 @@ public class BaseballMaster : MinigameMaster
                 {
                     return;
                 }
-                if (Math.Abs(player.ball.transform.position.y - 52) < 7)
+                if (Math.Abs(player.ball.transform.position.y - 52) < 7 && !player.ball.GetComponent<BaseballBall>().hit)
                 {
                     int modif = (int)Math.Pow(10 - Math.Abs(player.ball.transform.position.y - 52) / 7 * 10, 2);
                     player.score += modif;
@@ -179,6 +167,7 @@ public class BaseballMaster : MinigameMaster
                     player.resetBall = DateTime.Now;
                     player.ball.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.Range(-1000f, 1000f), UnityEngine.Random.Range(1000f, 2000f), 20000);
                     player.ball.GetComponent<BaseballBall>().startSmall(UnityEngine.Random.Range(0.015f, 0.025f));
+                    player.ball.GetComponent<BaseballBall>().hit = true;
                 }
                 else
                 {

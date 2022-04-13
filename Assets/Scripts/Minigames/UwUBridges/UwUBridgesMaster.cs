@@ -80,6 +80,10 @@ public class UwUBridgesMaster : MinigameMaster
     [NonSerialized]
     public GameObject[] squareScores;
 
+    [NonSerialized]
+    public GameObject[] playerMgScores;
+
+    private MinigameScoreboard mgScoreboard;
 
     private Vector3 GetPosFromLineCol(int i, int j)
     {
@@ -188,8 +192,7 @@ public class UwUBridgesMaster : MinigameMaster
 
         }
 
-
-        for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count; i++)
+       for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count; i++)
         {
             PlayerData data = GameMaster.INSTANCE.minigamePlayers[i];
 
@@ -206,6 +209,15 @@ public class UwUBridgesMaster : MinigameMaster
             players[i].pos = startPositions[i];
             players[i].data = data;
         }
+
+        playerMgScores = new GameObject[players.Count];
+        TextMeshProUGUI[] scoreText = new TextMeshProUGUI[players.Count];
+        for (int i=0;i<players.Count;++i){
+            playerMgScores[i]=createScoreboardComponent(i);
+            scoreText[i]=playerMgScores[i].GetComponent<TextMeshProUGUI>();
+        }
+        int[] scoreArray=new int[players.Count];
+        mgScoreboard = new MinigameScoreboard(scoreText,scoreArray,finishGame);
     }
 
     public override void OnPlayerKeyDown(int playerId, KeyCode key)
@@ -364,6 +376,12 @@ public class UwUBridgesMaster : MinigameMaster
                
             }
         }else{
+            int[] scores=new int[players.Count];
+            for (int i = 0; i < players.Count; i++)
+            {
+                scores[i] = players[i].score;
+            }
+            mgScoreboard.Update(scores,gameDone);
             Debug.Log("Round not playing"+elapsedTime+" "+PAUSE_TIME);
             elapsedTime += Time.deltaTime;
             Debug.Log("Elapsed time: " + elapsedTime);
@@ -381,35 +399,7 @@ public class UwUBridgesMaster : MinigameMaster
 
                 if (ROUNDS_REMAINING == 0)
                 {
-                    Dictionary<int, int> playerScores =
-                        new Dictionary<int, int>();
-
-                    foreach (UwUBridgesPlayer p in players)
-                    {
-                        playerScores.Add(p.data.id, p.score);
-                        Debug
-                            .Log("Total score for player " +
-                            p.data.id +
-                            ": " +
-                            p.score);
-                    }
-
-                    GameMaster.INSTANCE.minigameScoreboard =
-                        new List<PlayerData>();
-                    foreach (UwUBridgesPlayer p in players)
-                    GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
-
-                    GameMaster
-                        .INSTANCE
-                        .minigameScoreboard
-                        .Sort((p1, p2) =>
-                        {
-                            if (playerScores[p1.id] == playerScores[p2.id])
-                                return p2.id - p1.id;
-                            return playerScores[p2.id] - playerScores[p1.id];
-                        });
-                    gameDone = true;
-                    TaleExtra.MinigameScoreboard();
+                    finishGame();
                 }
 
                 int score_display_counter=0;
@@ -440,7 +430,7 @@ public class UwUBridgesMaster : MinigameMaster
         squareScores[position] = txt;
     }
 
-        public void displayBridgeScore(int x,int y,int position){
+    public void displayBridgeScore(int x,int y,int position){
         squareScores[position].GetComponent<TextMeshProUGUI>().SetText(arena[x, y].ToString());
     }
 
@@ -458,4 +448,45 @@ public class UwUBridgesMaster : MinigameMaster
     {
         return;
     }
+
+    public void finishGame(){
+        Dictionary<int, int> playerScores =
+            new Dictionary<int, int>();
+
+        foreach (UwUBridgesPlayer p in players)
+        {
+            playerScores.Add(p.data.id, p.score);
+            Debug.Log("Total score for player " +
+                        p.data.id +": " +p.score);
+        }
+
+        GameMaster.INSTANCE.minigameScoreboard =
+        new List<PlayerData>();
+        foreach (UwUBridgesPlayer p in players)
+        GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
+        GameMaster.INSTANCE.minigameScoreboard
+            .Sort((p1, p2) =>
+            {
+                if (playerScores[p1.id] == playerScores[p2.id])
+                    return p2.id - p1.id;
+                return playerScores[p2.id] - playerScores[p1.id];
+            });
+        gameDone = true;
+        TaleExtra.MinigameScoreboard();
+    }
+
+
+    
+    public GameObject createScoreboardComponent(int playerNumber){
+        GameObject txt = new GameObject();
+        txt.AddComponent<TextMeshProUGUI>();
+        txt.GetComponent<TextMeshProUGUI>().SetText("0");
+        txt.GetComponent<TextMeshProUGUI>().color =  GameMaster.INSTANCE.minigamePlayers[playerNumber].superColor.color;
+        txt.GetComponent<TextMeshProUGUI>().fontSize = 24;
+        txt.transform.position = GetPosFromLineCol((int)(ARENA_SIZE/(2+players.Count)*(1+playerNumber)),0);
+        txt.transform.SetParent(canvasTransform, false);
+        return txt;
+    }
+
+
 }

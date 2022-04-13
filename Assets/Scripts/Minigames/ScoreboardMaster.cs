@@ -22,6 +22,14 @@ public class ScoreboardMaster : MonoBehaviour
 
         for(int i = 0; i < GameMaster.INSTANCE.minigameScoreboard.Count; ++i)
         {
+            if (i == 0)
+            {
+                GameMaster.INSTANCE.minigameScoreboard[0].minigames_won++;
+            }
+            else
+            {
+                GameMaster.INSTANCE.minigameScoreboard[0].minigames_lost++;
+            }
             string color = "FFFFFF";
 
             if(i < PLAYER_PLACEMENT_COLORS.Length)

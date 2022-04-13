@@ -7,6 +7,7 @@ public class BaseballBall : MonoBehaviour
     private bool shouldSmall;
     private float modifier;
     private new Transform transform;
+    public bool hit = false;
     // Start is called before the first frame update
     void Start()
     {

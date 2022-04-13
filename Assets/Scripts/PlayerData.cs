@@ -24,6 +24,18 @@ public class PlayerData
     [NonSerialized]
     public int hp = MAX_HP;
 
+    [NonSerialized]
+    public int deaths = 0;
+
+    [NonSerialized]
+    public int kills = 0;
+
+    [NonSerialized]
+    public int minigames_won = 0;
+
+    [NonSerialized]
+    public int minigames_lost = 0;
+
     public GameMaster.SuperColor superColor;
 
     [NonSerialized]
@@ -57,6 +69,14 @@ public class PlayerData
 
     public void ModifyHP(int value)
     {
+        if (value < 0)
+        {
+            GameGuard.INSTANCE.DisplayMessage(name + " took " + -value + " damage");
+        }
+        else
+        {
+            GameGuard.INSTANCE.DisplayMessage(name + " healed for " + value);
+        }
         hp += value;
         if (hp > MAX_HP)
         {
@@ -65,8 +85,9 @@ public class PlayerData
 
         if (hp <= 0)
         {
+            GameGuard.INSTANCE.DisplayMessage(name + " died!");
             TeleportToSpot(GameMaster.INSTANCE.guard.GetRandomGraveyard());
-
+            deaths++;
             hp = MAX_HP;
         }
     }

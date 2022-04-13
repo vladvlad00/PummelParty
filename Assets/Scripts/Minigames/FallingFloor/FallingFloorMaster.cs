@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System;
 
 public class FallingFloorMaster : MinigameMaster
@@ -9,7 +10,6 @@ public class FallingFloorMaster : MinigameMaster
     private const float ROUND_TIME = 90f;
     private const float ACCELERATION = 0.9f;
 
-    private float remainingTime = 0f;
     private float fallInterval = 7f;
     private float fallDuration = 4f;
     private float elapsedTime = 0f;
@@ -20,6 +20,9 @@ public class FallingFloorMaster : MinigameMaster
 
     private List<GameObject> selectedSquares = new List<GameObject>();
     private List<PlayerData> scoreboard = new List<PlayerData>();
+
+    private GameTimer gameTimer;
+    public TextMeshProUGUI timerText;
 
     private const int ARENA_SIZE = 10;
     private const int padding = 2;
@@ -63,8 +66,6 @@ public class FallingFloorMaster : MinigameMaster
     void Awake()
     {
         InitInputMaster();
-
-        remainingTime = ROUND_TIME;
 
         Vector3[] corners = new Vector3[4];
         canvasTransform.GetLocalCorners(corners);
@@ -141,6 +142,7 @@ public class FallingFloorMaster : MinigameMaster
             players[i].data = data;
         }
         activePlayers = GameMaster.INSTANCE.minigamePlayers.Count;
+        gameTimer = new GameTimer(ROUND_TIME, timerText, finishGameTime);
     }
 
     private void selectParity(int round)
@@ -231,6 +233,20 @@ public class FallingFloorMaster : MinigameMaster
         patterns[pos](round);
     }
 
+    private void finishGameTime()
+    {
+        gameDone = true;
+        for (int i = 0; i < GameMaster.INSTANCE.minigamePlayers.Count; ++i)
+            if (players[i].isActiveAndEnabled)
+            {
+                scoreboard.Add(players[i].data);
+                break;
+            }
+        scoreboard.Reverse();
+        GameMaster.INSTANCE.minigameScoreboard = scoreboard;
+        TaleExtra.MinigameScoreboard();
+    }
+
     public void destroyPlayer(GameObject obj)
     {
         FallingFloorPlayer player = obj.GetComponent<FallingFloorPlayer>();
@@ -266,14 +282,9 @@ public class FallingFloorMaster : MinigameMaster
         {
             return;
         }
+        gameTimer.Update();
         float deltaTime = Time.deltaTime;
-        remainingTime -= deltaTime;
         elapsedTime += deltaTime;
-        if (remainingTime <= 0)
-        {
-            gameDone = true;
-            return;
-        }
 
         if (!falling)
         {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DarkLabirinthMaster : MinigameMaster
 {
@@ -62,6 +63,10 @@ public class DarkLabirinthMaster : MinigameMaster
     int[,] arena;
 
     GameObject[,] arenaSquares;
+
+    private GameTimer gameTimer;
+
+    public TextMeshProUGUI timerText;
 
     private Vector3 GetPosFromLineCol(int i, int j)
     {
@@ -206,6 +211,8 @@ public class DarkLabirinthMaster : MinigameMaster
                 }
             }
         }
+
+        gameTimer = new GameTimer(ROUND_MAX_TIME, timerText, finishGameTime);
     }
 
     public override void OnPlayerKeyHold(int playerId, KeyCode key)
@@ -267,9 +274,45 @@ public class DarkLabirinthMaster : MinigameMaster
         }
     }
 
+    private void finishGameTime()
+    {
+        Dictionary<int, int> playerScores = new Dictionary<int, int>();
+        Debug.Log("Time is up");
+
+        foreach (DarkLabirinthPlayer p in players)
+        {
+            if (p.finishedGame == false)
+            {
+                playerScores
+                    .Add(p.data.id, 10 + ARENA_SIZE_Y - (int)(p.pos.y));
+            }
+            else
+            {
+                playerScores.Add(p.data.id, p.position);
+            }
+        }
+        GameMaster.INSTANCE.minigameScoreboard = new List<PlayerData>();
+        foreach (DarkLabirinthPlayer p in players)
+            GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
+
+        GameMaster
+            .INSTANCE
+            .minigameScoreboard
+            .Sort((p1, p2) =>
+            {
+                if (playerScores[p1.id] == playerScores[p2.id])
+                    return p2.id - p1.id;
+                return playerScores[p2.id] - playerScores[p1.id];
+            });
+        gameDone = true;
+        TaleExtra.MinigameScoreboard();
+    }
+
     void Update()
     {
-        if (gameDone) return;
+        if (gameDone) 
+            return;
+        gameTimer.Update();
         elapsedTime += Time.deltaTime;
         Debug.Log("Elapsed time: " + elapsedTime);
         if (elapsedTime > timeBeforeSwap)
@@ -293,37 +336,15 @@ public class DarkLabirinthMaster : MinigameMaster
                 Debug.Log("Time to wait: " + timeBeforeSwap);
             }
         }
-        if (
-            playersThatFinished == players.Count ||
-            totalTimePassed >= ROUND_MAX_TIME
-        )
+        if (playersThatFinished == players.Count)
         {
             Dictionary<int, int> playerScores = new Dictionary<int, int>();
-            if (playersThatFinished == players.Count)
+            Debug.Log("All players finished");
+            foreach (DarkLabirinthPlayer p in players)
             {
-                Debug.Log("All players finished");
-                foreach (DarkLabirinthPlayer p in players)
-                {
-                    playerScores.Add(p.data.id, p.position);
-                }
+                playerScores.Add(p.data.id, p.position);
             }
-            else
-            {
-                Debug.Log("Time is up");
-
-                foreach (DarkLabirinthPlayer p in players)
-                {
-                    if (p.finishedGame == false)
-                    {
-                        playerScores
-                            .Add(p.data.id, 10 + ARENA_SIZE_Y - (int)(p.pos.y));
-                    }
-                    else
-                    {
-                        playerScores.Add(p.data.id, p.position);
-                    }
-                }
-            }
+            
             GameMaster.INSTANCE.minigameScoreboard = new List<PlayerData>();
             foreach (DarkLabirinthPlayer p in players)
             GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
