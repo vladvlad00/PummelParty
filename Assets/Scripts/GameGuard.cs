@@ -37,6 +37,9 @@ public class GameGuard : MonoBehaviour
     private GameObject[] scores;
     public RectTransform canvasTransform;
 
+    public TextMeshProUGUI message;
+    private float messageTime = 0;
+
     void Awake()
     {
         INSTANCE = this;
@@ -118,6 +121,13 @@ public class GameGuard : MonoBehaviour
         }
 
         CreateScores();
+    }
+
+    void Update()
+    {
+        messageTime -= Time.deltaTime;
+        if (messageTime < 0)
+            message.text = "";
     }
 
     public bool IsGraveyard(Spot spot)
@@ -211,5 +221,11 @@ public class GameGuard : MonoBehaviour
             }
             pos--;
         }
+    }
+
+    public void DisplayMessage(string message, float time = 5f)
+    {
+        this.message.text = message;
+        messageTime = time;
     }
 }

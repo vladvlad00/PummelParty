@@ -52,6 +52,14 @@ public class PlayerData
 
     public void ModifyHP(int value)
     {
+        if (value < 0)
+        {
+            GameGuard.INSTANCE.DisplayMessage("You took " + -value + " damage");
+        }
+        else
+        {
+            GameGuard.INSTANCE.DisplayMessage("You healed for" + value);
+        }
         hp += value;
         if (hp > MAX_HP)
         {
@@ -60,6 +68,7 @@ public class PlayerData
 
         if (hp <= 0)
         {
+            GameGuard.INSTANCE.DisplayMessage("YOU DIED :(");
             TeleportToSpot(GameMaster.INSTANCE.guard.GetRandomGraveyard());
 
             hp = MAX_HP;
