@@ -39,6 +39,8 @@ public class BaseballMaster : MinigameMaster
     [NonSerialized]
     private bool gameEnded = false;
 
+    private GameTimer gameTimer;
+
     void Awake()
     {
         InitInputMaster();
@@ -95,6 +97,7 @@ public class BaseballMaster : MinigameMaster
             basePos.x += xModif * 2;
         }
         startTime = DateTime.Now;
+        gameTimer = new GameTimer(maxTime, timeText, finishGame);
     }   
 
     float ballFormula(int x)
@@ -108,24 +111,8 @@ public class BaseballMaster : MinigameMaster
         {
             return;
         }
-        double timeleft = (DateTime.Now - startTime).TotalSeconds;
-        string timeString = "";
-        if (timeleft < maxTime)
-        {
-            if (timeleft > 25) 
-            {
-                timeString = ((maxTime - timeleft).ToString() + "00000").Substring(0, 5);
-            }
-            else
-            {
-                timeString = ((int)(maxTime - timeleft)).ToString();
-            }
-            timeText.SetText("Time left: " + timeString + "s");
-        }
-        else
-        {
-            finishGame();
-        }
+        gameTimer.Update();
+
         foreach(BaseballPlayer player in players)
         {
             if ((player.resetBallBool && (DateTime.Now - player.resetBall).TotalSeconds >= maxBallTime) || (!player.resetBallBool && player.ball.transform.position.y <= ballStopY))
