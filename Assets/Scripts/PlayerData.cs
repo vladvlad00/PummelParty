@@ -66,11 +66,11 @@ public class PlayerData
     {
         if (value < 0)
         {
-            GameGuard.INSTANCE.DisplayMessage("You took " + -value + " damage");
+            GameGuard.INSTANCE.DisplayMessage(name + " took " + -value + " damage");
         }
         else
         {
-            GameGuard.INSTANCE.DisplayMessage("You healed for" + value);
+            GameGuard.INSTANCE.DisplayMessage(name + " healed for " + value);
         }
         hp += value;
         if (hp > MAX_HP)
@@ -80,9 +80,9 @@ public class PlayerData
 
         if (hp <= 0)
         {
-            GameGuard.INSTANCE.DisplayMessage("YOU DIED :(");
+            GameGuard.INSTANCE.DisplayMessage(name + " died!");
             TeleportToSpot(GameMaster.INSTANCE.guard.GetRandomGraveyard());
-
+            deaths++;
             hp = MAX_HP;
         }
     }

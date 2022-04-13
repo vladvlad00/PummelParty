@@ -17,5 +17,6 @@ public class PlayerScore : MonoBehaviour
     {
         transform.Find("PlayerHealth").gameObject.GetComponent<TextMeshProUGUI>().text = data.hp + " health";
         transform.Find("PlayerCrowns").gameObject.GetComponent<TextMeshProUGUI>().text = data.crowns + "/3 crowns";
+        transform.Find("PlayerCoins").gameObject.GetComponent<TextMeshProUGUI>().text = data.coins + " coins";
     }
 }

@@ -180,11 +180,11 @@ public class GameGuard : MonoBehaviour
         float sizeX = maxX - minX;
         float sizeY = maxY - minY;
         float scoreWidth = sizeX / 8;
-        float scoreHeight = sizeY / 9;
+        float scoreHeight = sizeY / 8;
         scores = new GameObject[players.Count];
         for (int i = 0; i < players.Count; i++)
         {
-            Vector3 pos = new Vector3(scoreWidth / 2, -(scoreHeight / 2 + ((padding + scoreHeight) * i)), 0);
+            Vector3 pos = new Vector3(scoreWidth / 2 - 20, -(scoreHeight / 2 + ((padding + scoreHeight) * i)) - 20, 0);
             scores[i] = Instantiate(scorePrefab, pos, Quaternion.identity);
             scores[i].GetComponent<RectTransform>().SetParent(canvasTransform, false);
             scores[i].GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);

@@ -19,12 +19,14 @@ public class GameMaster : MonoBehaviour
     public class SuperColor
     {
         public Color color;
+        public Color outline;
         public Material material;
         public string name;
 
-        public SuperColor(Color c, string s)
+        public SuperColor(Color c, Color o, string s)
         {
             color = c;
+            outline = o;
             name = s;
         }
 
@@ -35,14 +37,14 @@ public class GameMaster : MonoBehaviour
     }
 
     public static readonly SuperColor[] playerColors = {
-            new SuperColor(Color.red, "red"),
-            new SuperColor(Color.green, "green"),
-            new SuperColor(Color.blue, "blue"),
-            new SuperColor(Color.yellow, "yellow"),
-            new SuperColor(Color.cyan, "cyan"),
-            new SuperColor(Color.gray, "gray"),
-            new SuperColor(Color.magenta, "magenta"),
-            new SuperColor(Color.black, "black")
+            new SuperColor(Color.red, Color.black, "red"),
+            new SuperColor(Color.green, Color.white, "green"),
+            new SuperColor(Color.blue, Color.white, "blue"),
+            new SuperColor(Color.yellow, Color.black, "yellow"),
+            new SuperColor(Color.cyan, Color.black, "cyan"),
+            new SuperColor(Color.gray, Color.black, "gray"),
+            new SuperColor(Color.magenta, Color.black, "magenta"),
+            new SuperColor(Color.black, Color.white, "black")
     };
 
     public enum Minigame
@@ -176,8 +178,12 @@ public class GameMaster : MonoBehaviour
     {
         if(ShouldPlayerWin(playerData[currentPlayer]))
         {
-            Debug.Log(string.Format("Player {0} won!!!!!!!!!!!!!!!!!!!!!!!!!!!!", currentPlayer));
-            Debug.Break();
+            TaleExtra.DisableInput();
+            TaleExtra.RipOut();
+            Tale.Scene("Scenes/FinalScore");
+            TaleExtra.RipIn();
+            TaleExtra.EnableInput();
+            return;
         }
 
         // Next turn
