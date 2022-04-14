@@ -54,7 +54,7 @@ public class Item
 
             other.TeleportToSpot(GameMaster.INSTANCE.guard.boardSpots[player.spot]);
             player.TeleportToSpot(GameMaster.INSTANCE.guard.boardSpots[otherSpot]);
-            GameMaster.INSTANCE.guard.DisplayMessage(string.Format("{0} got teleported", player.name));
+            GameMaster.INSTANCE.guard.DisplayMessage(string.Format("{0} swapped places with {1}", player.name, other.name));
         })
     };
 }
