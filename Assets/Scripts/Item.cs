@@ -6,14 +6,16 @@ public class Item
     public string name;
     public string description;
     public string spritePath;
+    public int price;
 
     public Delegates.UseItemDelegate onUse;
 
-    public Item(string name, string description, string spritePath, Delegates.UseItemDelegate onUse)
+    public Item(string name, string description, string spritePath, int price, Delegates.UseItemDelegate onUse)
     {
         this.name = name;
         this.description = description;
         this.spritePath = spritePath;
+        this.price = price;
         this.onUse = onUse;
     }
 
@@ -24,12 +26,12 @@ public class Item
 
     public static readonly List<Item> ITEMS = new List<Item>()
     {
-        new Item("Medkit", "Heals 10hp", "Sprites/UI/ItemMedkit", (player) =>
+        new Item("Medkit", "Heals 10hp", "Sprites/UI/ItemMedkit", 10, (player) =>
         {
             player.ModifyHP(10);
             GameMaster.INSTANCE.guard.DisplayMessage(string.Format("{0} healed 10 health", player.name));
         }),
-        new Item("Sniper", "Deals 10 damage to a random player", "Sprites/UI/ItemSniper", (player) =>
+        new Item("Sniper", "Deals 10 damage to a random player", "Sprites/UI/ItemSniper", 20, (player) =>
         {
             PlayerData other;
 
@@ -41,7 +43,7 @@ public class Item
             other.ModifyHP(-10);
             GameMaster.INSTANCE.guard.DisplayMessage(string.Format("{0} sniped {1} for 10 health", player.name, other.name));
         }),
-        new Item("Teleporter", "Swaps your place with someone else's", "Sprites/UI/ItemTeleporter", (player) =>
+        new Item("Teleporter", "Swaps your place with someone else's", "Sprites/UI/ItemTeleporter", 30, (player) =>
         {
             PlayerData other;
 

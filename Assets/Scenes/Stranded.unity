@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2148,7 +2148,9 @@ MonoBehaviour:
   diceText: {fileID: 857130486}
   board: {fileID: 1642464000}
   itemContainer: {fileID: 689900279}
+  shopContainer: {fileID: 1115028734}
   itemContainerMaster: {fileID: 314229562}
+  shopMaster: {fileID: 1398411556}
   players:
   - {fileID: 1161643780}
   - {fileID: 1110351946}
@@ -5243,6 +5245,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb23e70735c2816449dad71e28f67593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1115028733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1115028734}
+  m_Layer: 5
+  m_Name: Shop Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1115028734
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115028733}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1262565101}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 500, y: 243.28998}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1158701693 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1604036230344006394, guid: fd20bc8caf6742e4ca359ebade0844a3, type: 3}
@@ -5677,6 +5715,7 @@ RectTransform:
   - {fileID: 857130485}
   - {fileID: 689900279}
   - {fileID: 1667675969}
+  - {fileID: 1115028734}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5926,6 +5965,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9048021344961900331, guid: fd20bc8caf6742e4ca359ebade0844a3, type: 3}
   m_PrefabInstance: {fileID: 793691988}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1398411555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1398411557}
+  - component: {fileID: 1398411556}
+  m_Layer: 0
+  m_Name: Shop Master
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1398411556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398411555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2e6307cc604c94abcbfd0faaec86ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 1274615061971031482, guid: 6ef2e9714ef03754daa5f2bbfabe46b9, type: 3}
+--- !u!4 &1398411557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398411555}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1408831192
 PrefabInstance:
   m_ObjectHideFlags: 0

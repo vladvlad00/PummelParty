@@ -195,6 +195,7 @@ public class GameMaster : MonoBehaviour
         // Next turn
         currentPlayer = (currentPlayer + 1) % guard.players.Count;
         guard.itemContainerMaster.ShowItems();
+        guard.shopMaster.OpenShop();
     }
 
     public void RemoveCrownSpot()
@@ -247,6 +248,7 @@ public class GameMaster : MonoBehaviour
         if (guard)
         {
             guard.itemContainerMaster.ShowItems();
+            guard.shopMaster.OpenShop();
 
             if (crownSpotPos.x != -9999f)
             {
@@ -290,6 +292,7 @@ public class GameMaster : MonoBehaviour
         if (InputEnabled() && Input.GetKeyDown("space"))
         {
             guard.itemContainerMaster.HideItems();
+            guard.shopMaster.CloseShop();
             OnPlayerRoll();
         }
     }
