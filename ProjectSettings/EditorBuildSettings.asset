@@ -44,4 +44,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FinalScore.unity
     guid: c9a1035d32f839f48afd1ac0daa7371a
+  - enabled: 1
+    path: Assets/Scenes/Minigames/StackingBoxes.unity
+    guid: 4d29404b311cc4644bcda306ae1c2ecb
   m_configObjects: {}
