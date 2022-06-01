@@ -47,4 +47,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigames/StackingBoxes.unity
     guid: 4d29404b311cc4644bcda306ae1c2ecb
+  - enabled: 1
+    path: Assets/Scenes/Minigames/PuzzleRace.unity
+    guid: b7541854391477e4b8490faec338863c
   m_configObjects: {}

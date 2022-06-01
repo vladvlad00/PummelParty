@@ -13,8 +13,8 @@ public class DarkLabirinthPlayer : MonoBehaviour
         public new Transform transform;
 
         public Vector2 pos;
-        public bool finishedGame=false;
         public int position=0;
+        public bool finishedGame=false;
     
         void Awake(){
             rigidBody = GetComponent<Rigidbody2D>();

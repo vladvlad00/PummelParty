@@ -59,7 +59,8 @@ public class GameMaster : MonoBehaviour
         DarkLabirinth,
         FallingFloor,
         UwUBridges,
-        StackingBoxes
+        StackingBoxes,
+        PuzzleRace
     }
 
     public static bool INPUT_ENABLED = true;
