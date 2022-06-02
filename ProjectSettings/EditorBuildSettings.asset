@@ -50,4 +50,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigames/PuzzleRace.unity
     guid: b7541854391477e4b8490faec338863c
+  - enabled: 1
+    path: Assets/Scenes/Minigames/BombBattle.unity
+    guid: 08bffab14b7492f4598d1b513078a20d
   m_configObjects: {}

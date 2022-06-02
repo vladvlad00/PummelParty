@@ -60,7 +60,8 @@ public class GameMaster : MonoBehaviour
         FallingFloor,
         UwUBridges,
         StackingBoxes,
-        PuzzleRace
+        PuzzleRace,
+        BombBattle
     }
 
     public static bool INPUT_ENABLED = true;
