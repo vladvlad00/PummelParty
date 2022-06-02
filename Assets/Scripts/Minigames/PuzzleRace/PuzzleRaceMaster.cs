@@ -18,7 +18,7 @@ public class PuzzleRaceMaster : MinigameMaster
 
     private int ROUNDS_REMAINING = 1;
 
-    private float ROUND_MAX_TIME = 100f;
+    private float ROUND_MAX_TIME = 50f;
 
     bool roundPlaying = true;
 
@@ -79,6 +79,9 @@ public class PuzzleRaceMaster : MinigameMaster
 
 
     int[,] arena;
+
+    private GameTimer gameTimer;
+    public TextMeshProUGUI timerText;
 
     GameObject[,] arenaSquares;
     [NonSerialized]
@@ -191,6 +194,7 @@ public class PuzzleRaceMaster : MinigameMaster
         }
         int[] scoreArray=new int[players.Count];
         mgScoreboard = new MinigameScoreboard(scoreText,scoreArray,finishGame);
+        gameTimer = new GameTimer(ROUND_MAX_TIME, timerText, finishGameTime);
     }
 
     public override void OnPlayerKeyDown(int playerId, KeyCode key)
@@ -270,11 +274,46 @@ public class PuzzleRaceMaster : MinigameMaster
             GetPosFromLineCol(player.pos.x, player.pos.y);
     }
 
+    private void finishGameTime()
+    {
+        Dictionary<int, int> playerScores = new Dictionary<int, int>();
+        Debug.Log("Time is up");
+
+        // foreach (PuzzleRacePlayer p in players)
+        // {
+        //     if (p.finishedGame == false)
+        //     {
+        //         playerScores
+        //             .Add(p.data.id, 10 + ARENA_SIZE_Y - (int)(p.pos.y));
+        //     }
+        //     else
+        //     {
+        //         playerScores.Add(p.data.id, p.position);
+        //     }
+        // }
+        GameMaster.INSTANCE.minigameScoreboard = new List<PlayerData>();
+        foreach (PuzzleRacePlayer p in players)
+            GameMaster.INSTANCE.minigameScoreboard.Add(p.data);
+
+        GameMaster
+            .INSTANCE
+            .minigameScoreboard
+            .Sort((p1, p2) =>
+            {
+                if (playerScores[p1.id] == playerScores[p2.id])
+                    return p2.id - p1.id;
+                return playerScores[p2.id] - playerScores[p1.id];
+            });
+        gameDone = true;
+        TaleExtra.MinigameScoreboard();
+    }
+
     void Update()
     {
         if (roundPlaying)
         {
             if (gameDone) return;
+            gameTimer.Update();
             elapsedTime += Time.deltaTime;
 
             if (elapsedTime > ROUND_MAX_TIME || playersThatFinished==GameMaster.INSTANCE.minigamePlayers.Count)
