@@ -96,9 +96,9 @@ public class FishingMaster : MinigameMaster
             if (
                 fish[i].GetComponent<FishingFish>().player == -1
                 &&
-                x + 6 >= fish[i].GetComponent<FishingFish>().transform.localPosition.x && x <= fish[i].GetComponent<FishingFish>().transform.localPosition.x + (30 * fish[i].GetComponent<FishingFish>().size)
+                x + 12 >= fish[i].GetComponent<FishingFish>().transform.localPosition.x && x <= fish[i].GetComponent<FishingFish>().transform.localPosition.x + (30 * fish[i].GetComponent<FishingFish>().size)
                 && 
-                y + 8 >= fish[i].GetComponent<FishingFish>().transform.localPosition.y && y <= fish[i].GetComponent<FishingFish>().transform.localPosition.y + (21 * fish[i].GetComponent<FishingFish>().size)
+                y + 16 >= fish[i].GetComponent<FishingFish>().transform.localPosition.y && y <= fish[i].GetComponent<FishingFish>().transform.localPosition.y + (21 * fish[i].GetComponent<FishingFish>().size)
                 )
             {
                 return i;
@@ -199,10 +199,6 @@ public class FishingMaster : MinigameMaster
                 break;
             case KeyCode.D:
                 player.rigidBody.velocity = new Vector2(100, 0f);
-                if (player.transform.localPosition.x >= 430)
-                {
-                    player.transform.localPosition = new Vector3(430, player.transform.localPosition.y, player.transform.localPosition.z);
-                }
                 break;
         }
     }

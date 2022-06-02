@@ -53,4 +53,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigames/BombBattle.unity
     guid: 08bffab14b7492f4598d1b513078a20d
+  - enabled: 1
+    path: Assets/Scenes/Minigames/Fishing.unity
+    guid: f9e79d786842d0a4bb7c64350e3f399d
   m_configObjects: {}
