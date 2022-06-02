@@ -5,7 +5,7 @@ using System;
 
 public class HopRacePlayer : MonoBehaviour
 {
-    public const float SPEED = 500f;
+    public const float SPEED = 45f;
 
     [NonSerialized]
     public PlayerData data;

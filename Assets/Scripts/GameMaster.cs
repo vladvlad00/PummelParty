@@ -61,6 +61,7 @@ public class GameMaster : MonoBehaviour
         UwUBridges,
         StackingBoxes,
         PuzzleRace,
+        BombBattle,
         Fishing
     }
 
