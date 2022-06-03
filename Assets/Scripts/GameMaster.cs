@@ -198,6 +198,22 @@ public class GameMaster : MonoBehaviour
 
         // Next turn
         currentPlayer = (currentPlayer + 1) % guard.players.Count;
+
+        if (currentPlayer == 0)
+        {
+            Minigame minigame = Minigame.HopRace;
+
+            // If it's not rigged, choose a random minigame. Otherwise, TryParse will set the rigged minigame
+            if (string.IsNullOrWhiteSpace(rigMinigame) || !Enum.TryParse<Minigame>(rigMinigame, true, out minigame))
+            {
+                Array pool = Enum.GetValues(typeof(Minigame));
+                minigame = (Minigame)pool.GetValue(UnityEngine.Random.Range(0, pool.Length));
+            }
+
+            TriggerMinigame(minigame, playerData);
+            return;
+        }
+
         guard.itemContainerMaster.ShowItems();
         guard.shopMaster.OpenShop();
     }
@@ -337,6 +353,11 @@ public class GameMaster : MonoBehaviour
 
     void TriggerMinigameOnSpot()
     {
+        if(currentPlayer == playerData.Count - 1)
+        {
+            return;
+        }
+
         for (; minigameTriggerSpot < guard.boardSpots.Count; minigameTriggerSpot++)
         {
             minigamePlayers = new List<PlayerData>();
