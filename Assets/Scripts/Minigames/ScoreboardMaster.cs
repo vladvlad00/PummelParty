@@ -50,6 +50,7 @@ public class ScoreboardMaster : MonoBehaviour
     {
         if(InputMaster.GetKeyDown(KeyCode.Space))
         {
+            GameMaster.INSTANCE.playerData = GameMaster.INSTANCE.minigameScoreboard;
             TaleExtra.ReturnFromMinigame();
         }
     }
